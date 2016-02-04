@@ -1,0 +1,6 @@
+mysqldb = milog
+mysqlhost = 127.0.0.1
+mysqlport = 3306
+mysqluser = YOUR_MYSQL_USERNAME
+mysqlpass = YOUR_MYSQL_PASSWORD
+mysqlcharset = utf8

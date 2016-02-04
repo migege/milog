@@ -44,6 +44,24 @@ func NewPostModel() *PostModel {
 	return new(PostModel)
 }
 
+func (this *PostModel) Count() (int64, error) {
+	count, err := ORM().QueryTable(TABLE_NAME_POST).Count()
+	return count, err
+}
+
+func (this *PostModel) Offset(orderby string, offset, limit int) ([]*Post, error) {
+	o := ORM()
+	var posts []*Post
+	_, err := o.QueryTable(TABLE_NAME_POST).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
+	if err != nil {
+		return posts, err
+	}
+	for _, post := range posts {
+		_, _ = o.LoadRelated(post, "Tags")
+	}
+	return posts, err
+}
+
 func (this *PostModel) All(orderby string) []*Post {
 	o := ORM()
 	var posts []*Post

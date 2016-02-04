@@ -10,12 +10,14 @@
     </div>
     <div class="post-footer">
       <span class="label label-default"><a href="/author/{{.Author.AuthorId}}">{{.Author.DisplayName}}</a> posted @ {{.PostTime}}</span>
+      <span class="label label-success"><a href="/post/{{.PostSlug}}#comments">{{.CommentCount}}&nbsp;{{if eq .CommentCount 1}}comment{{else}}comments{{end}}</a></span>
       {{range .Tags}}
       <span class="label label-info"><a href="/tag/{{.TagSlug}}">{{.TagName}}</a></span>
       {{end}}
     </div>
   </div>
   {{end}}
+{{template "paginator.tpl" .}}
 </div>
 {{template "sidebar.tpl" .}}
 {{template "footer.tpl" .}}

@@ -1,5 +1,5 @@
-  <h3>{{.Post.CommentCount}}&nbsp;Comment{{if ne .Post.CommentCount 1}}s{{end}}</h3>
   <div id="comments" class="comments">
+    <h3>{{.Post.CommentCount}}&nbsp;Comment{{if ne .Post.CommentCount 1}}s{{end}}</h3>
     {{range .Comments}}
     <div class="comment" id="comment-{{.CommentId}}">
       <div class="comment-header">

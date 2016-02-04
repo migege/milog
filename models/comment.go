@@ -74,6 +74,13 @@ func (this *CommentModel) ByPostId(id int, orderby string) []*Comment {
 	return comments
 }
 
+func (this *CommentModel) Latest(limit int) ([]*Comment, error) {
+	o := ORM()
+	var comments []*Comment
+	_, err := o.QueryTable(TABLE_NAME_COMMENT).Filter("CommentStatus", COMMENT_STATUS_APPROVED).OrderBy("-CommentTime").Limit(limit).RelatedSel().All(&comments)
+	return comments, err
+}
+
 func (this *CommentModel) AddComment(comment *Comment) (int64, error) {
 	o := ORM()
 	o.Begin()

@@ -15,7 +15,7 @@
   <div class="posts">
     {{range .Posts}}
     <div>
-      <a href="/post/{{.PostId}}"><h2>{{.PostTitle}}</h2></a>
+      <a href="/post/{{.PostSlug}}"><h2>{{.PostTitle}}</h2></a>
     </div>
     {{end}}
   </div>

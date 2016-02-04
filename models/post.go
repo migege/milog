@@ -13,6 +13,7 @@ const (
 type Post struct {
 	PostId           int    `orm:"auto"`
 	PostTitle        string `orm:"size(128)"`
+	PostSlug         string `orm:"size(128)"`
 	PostContent      string
 	PostContentMd    string
 	PostTime         string `orm:"auto_now_add;type(datetime)"`
@@ -56,18 +57,32 @@ func (this *PostModel) All(orderby string) []*Post {
 	return posts
 }
 
-func (this *PostModel) ById(id int) *Post {
+func (this *PostModel) ById(id int) (*Post, error) {
 	o := ORM()
 	post := &Post{PostId: id}
 	err := o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).RelatedSel().One(post)
 	if err != nil {
-		panic(err)
+		return post, err
 	}
 	_, err = o.LoadRelated(post, "Tags")
 	if err != nil {
-		panic(err)
+		return post, err
 	}
-	return post
+	return post, err
+}
+
+func (this *PostModel) BySlug(post_slug string) (*Post, error) {
+	o := ORM()
+	post := &Post{PostSlug: post_slug}
+	err := o.QueryTable(TABLE_NAME_POST).Filter("PostSlug", post_slug).RelatedSel().One(post)
+	if err != nil {
+		return post, err
+	}
+	_, err = o.LoadRelated(post, "Tags")
+	if err != nil {
+		return post, err
+	}
+	return post, err
 }
 
 func (this *PostModel) ByAuthorId(author_id int, orderby string) []*Post {
@@ -124,6 +139,7 @@ func (this *PostModel) PostEdit(post *Post) error {
 		orm.Params{
 			"CommentStatus":    post.CommentStatus,
 			"PostTitle":        post.PostTitle,
+			"PostSlug":         post.PostSlug,
 			"PostContent":      post.PostContent,
 			"PostContentMd":    post.PostContentMd,
 			"PostModifiedTime": post.PostModifiedTime,

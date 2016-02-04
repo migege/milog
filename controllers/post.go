@@ -13,13 +13,8 @@ type PostController struct {
 	BaseController
 }
 
-func (this *PostController) Get() {
+func (this *PostController) setPost(post *models.Post) {
 	this.TplName = "post.tpl"
-	id_str := this.Ctx.Input.Param(":id")
-	post_id, _ := strconv.Atoi(id_str)
-
-	post := models.NewPostModel().ById(post_id)
-
 	this.Data["Author"] = post.Author
 	this.Data["Post"] = post
 	this.Data["PageTitle"] = fmt.Sprintf("%s - %s", post.PostTitle, blogTitle)
@@ -42,6 +37,25 @@ func (this *PostController) Get() {
 	}
 }
 
+func (this *PostController) BySlug() {
+	post_slug := this.Ctx.Input.Param(":slug")
+	post, err := models.NewPostModel().BySlug(post_slug)
+	if err != nil {
+		this.Abort("404")
+	}
+	this.setPost(post)
+}
+
+func (this *PostController) ById() {
+	id_str := this.Ctx.Input.Param(":id")
+	post_id, _ := strconv.Atoi(id_str)
+	post, err := models.NewPostModel().ById(post_id)
+	if err != nil {
+		this.Abort("404")
+	}
+	this.setPost(post)
+}
+
 func (this *PostController) PostNew() {
 	this.CheckLogged()
 	this.TplName = "admin-post.tpl"
@@ -53,10 +67,15 @@ func (this *PostController) PostNew() {
 func (this *PostController) DoPostNew() {
 	this.CheckLogged()
 	post_title := this.GetString("post-title")
+	post_slug := this.GetString("post-slug")
+	_, err := strconv.Atoi(post_slug)
+	if err == nil {
+		panic(errors.New("error: post slug should not be a number"))
+	}
 	post_content := this.GetString("post-content")
 	post_content_md := this.GetString("post-content-md")
-	if post_title == "" || post_content == "" || post_content_md == "" {
-		panic(errors.New("error: empty post title or content"))
+	if post_title == "" || post_content == "" || post_content_md == "" || post_slug == "" {
+		panic(errors.New("error: empty post title, slug or content"))
 	}
 	comment_status, err := this.GetInt("comment-status", 1)
 	if err != nil {
@@ -77,14 +96,15 @@ func (this *PostController) DoPostNew() {
 	post.Tags = tags
 	post.CommentStatus = comment_status
 	post.PostTitle = post_title
+	post.PostSlug = post_slug
 	post.PostContent = post_content
 	post.PostContentMd = post_content_md
 	post.Author = this.loggedUser
-	post_id, err := models.NewPostModel().PostNew(post)
+	_, err = models.NewPostModel().PostNew(post)
 	if err != nil {
 		panic(err)
 	} else {
-		this.Redirect(fmt.Sprintf("/post/%d", post_id), 302)
+		this.goToPost(post)
 	}
 }
 
@@ -94,8 +114,10 @@ func (this *PostController) PostEdit() {
 	id := this.Ctx.Input.Param(":id")
 	post_id, _ := strconv.Atoi(id)
 
-	post := models.NewPostModel().ById(post_id)
-	if post.Author.AuthorId != this.loggedUser.AuthorId {
+	post, err := models.NewPostModel().ById(post_id)
+	if err != nil {
+		panic(err)
+	} else if post.Author.AuthorId != this.loggedUser.AuthorId {
 		panic(errors.New("error: can't edit another one's post"))
 	}
 
@@ -113,10 +135,15 @@ func (this *PostController) DoPostEdit() {
 		panic(err)
 	}
 	post_title := this.GetString("post-title")
+	post_slug := this.GetString("post-slug")
+	_, err = strconv.Atoi(post_slug)
+	if err == nil {
+		panic(errors.New("error: post slug should not be a number"))
+	}
 	post_content := this.GetString("post-content")
 	post_content_md := this.GetString("post-content-md")
-	if post_title == "" || post_content == "" || post_content_md == "" {
-		panic(errors.New("error: empty post title or content"))
+	if post_title == "" || post_content == "" || post_content_md == "" || post_slug == "" {
+		panic(errors.New("error: empty post title, slug or content"))
 	}
 	comment_status, err := this.GetInt("comment-status", 1)
 	if err != nil {
@@ -137,6 +164,7 @@ func (this *PostController) DoPostEdit() {
 	post.PostId = post_id
 	post.CommentStatus = comment_status
 	post.PostTitle = post_title
+	post.PostSlug = post_slug
 	post.PostContent = post_content
 	post.PostContentMd = post_content_md
 	post.PostModifiedTime = time.Now().Format("2006-01-02 15:04:05")
@@ -146,5 +174,9 @@ func (this *PostController) DoPostEdit() {
 	if err != nil {
 		panic(err)
 	}
-	this.Redirect(fmt.Sprintf("/post/%d", post_id), 302)
+	this.goToPost(post)
+}
+
+func (this *PostController) goToPost(post *models.Post) {
+	this.Redirect(fmt.Sprintf("/post/%s", post.PostSlug), 302)
 }

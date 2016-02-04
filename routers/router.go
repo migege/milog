@@ -6,9 +6,10 @@ import (
 )
 
 func init() {
-	// basic pages
+	// home
 	beego.Router("/", &controllers.MainController{})
-	beego.Router("/post/:id([0-9]+)", &controllers.PostController{})
+
+	// author
 	beego.Router("/author/:id([0-9]+)", &controllers.AuthorController{})
 
 	// comments
@@ -30,6 +31,8 @@ func init() {
 	beego.Router("/admin/option-edit", &controllers.OptionController{}, "post:DoEdit")
 
 	// posts
+	beego.Router("/post/:id([0-9]+)", &controllers.PostController{}, "get:ById")
+	beego.Router("/post/:slug", &controllers.PostController{}, "get:BySlug")
 	beego.Router("/admin/post-new", &controllers.PostController{}, "get:PostNew")
 	beego.Router("/admin/post-new", &controllers.PostController{}, "post:DoPostNew")
 	beego.Router("/admin/post-edit/:id([0-9]+)", &controllers.PostController{}, "get:PostEdit")

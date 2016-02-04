@@ -3,7 +3,7 @@
   {{range .Posts}}
   <div class="post" id="post_{{.PostId}}">
     <div class="post-header">
-      <a href="/post/{{.PostId}}"><h2>{{.PostTitle}}</h2></a>
+      <a href="/post/{{.PostSlug}}"><h2>{{.PostTitle}}</h2></a>
     </div>
     <div class="post-body">
       {{str2html .PostContent}}

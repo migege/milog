@@ -2,7 +2,7 @@
   <div class="col-xs-12 col-md-9" id="admin-content">
     <form id="post-form" action="{{if .Post}}/admin/post-edit{{else}}/admin/post-new{{end}}" method="post">
       <div class="form-group post-form-header post-form-field">
-        <h2><input class="form-control" type="text" name="post-title" placeholder="Enter title here..." value="{{.Post.PostTitle}}"></h2>
+        <h2><input class="form-control" type="text" name="post-title" placeholder="Enter title here..." value="{{.Post.PostTitle}}" /></h2>
       </div>
       <div class="form-group post-form-text post-form-field">
         <p>
@@ -21,6 +21,10 @@
           {{end}}
         {{end}}
         </select>
+      </div>
+      <div class="form-group">
+        <label for="post-slug">Post Slug</label>
+        <input class="form-control" type="text" name="post-slug" id="post-slug" placeholder="Enter a unique post slug..." value="{{.Post.PostSlug}}" />
       </div>
       <div class="checkbox">
         <label>

@@ -42,7 +42,7 @@
 <script type="text/javascript">
 function Editor(input,preview,output){
   this.update=function(){
-    preview.innerHTML=markdown.toHTML(input.value)
+    preview.innerHTML=markdown.toHTML(input.value,"Maruku")
     output.value=preview.innerHTML
   }
   input.editor=this

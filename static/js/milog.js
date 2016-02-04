@@ -1,4 +1,5 @@
 $(".post-tags").select2({tags:true})
+$('table').addClass("table table-striped")
 $('#commentform').submit(function(){
   $.ajax({
     url:$(this).attr('action'),

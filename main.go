@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/astaxie/beego"
-	_ "milog/routers"
+	_ "github.com/migege/milog/routers"
 )
 
 func init() {

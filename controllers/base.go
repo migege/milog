@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/astaxie/beego"
-	"milog/models"
+	"github.com/migege/milog/models"
 	"strconv"
 	"time"
 )

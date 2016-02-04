@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"milog/models"
+	"github.com/migege/milog/models"
 )
 
 type LoginController struct {

@@ -5,7 +5,7 @@ import (
 	_ "fmt"
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/utils/captcha"
-	"milog/models"
+	"github.com/migege/milog/models"
 	"strconv"
 )
 

@@ -3,7 +3,7 @@ package controllers
 import (
 	"errors"
 	"fmt"
-	"milog/models"
+	"github.com/migege/milog/models"
 	"strconv"
 	"strings"
 	"time"

@@ -20,7 +20,7 @@ type Post struct {
 	CommentStatus    int
 	CommentCount     int
 	Author           *Author `orm:"rel(fk);on_delete(do_nothing)"`
-	Tags             []*Tag  `orm:"rel(m2m);rel_through(milog/models.TagRelationship)"`
+	Tags             []*Tag  `orm:"rel(m2m);rel_through(github.com/migege/milog/models.TagRelationship)"`
 }
 
 func NewPost() *Post {

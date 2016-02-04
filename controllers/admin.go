@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	_ "milog/models"
 )
 
 type AdminController struct {

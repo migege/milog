@@ -2,7 +2,7 @@ package controllers
 
 import (
 	_ "fmt"
-	"milog/models"
+	"github.com/migege/milog/models"
 )
 
 type TagController struct {

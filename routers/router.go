@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/astaxie/beego"
-	"milog/controllers"
+	"github.com/migege/milog/controllers"
 )
 
 func init() {

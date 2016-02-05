@@ -3,7 +3,7 @@
     <form action="/admin/option-edit" method="post">
       {{range .Options}}
       <div class="form-group">
-        <label for="opt_{{.OptionName}}">{{.OptionDesc}}</label>
+        <label for="opt_{{.OptionName}}">{{if .OptionDesc}}{{.OptionDesc}}{{else}}{{.OptionName}}{{end}}</label>
         <input class="form-control" id="opt_{{.OptionName}}" name="{{.OptionName}}" value="{{.OptionValue}}" />
       </div>
       {{else}}

@@ -26,6 +26,14 @@ type Option struct {
 	OptionDesc  string `orm:"size(128)"`
 }
 
+func NewOption(name string) *Option {
+	return &Option{
+		OptionName:  name,
+		OptionValue: "",
+		OptionDesc:  "",
+	}
+}
+
 func (this *Option) TableName() string {
 	return TABLE_NAME_OPTION
 }
@@ -43,9 +51,9 @@ func NewOptionModel() *OptionModel {
 
 func (this *OptionModel) Name(name string) *Option {
 	o := ORM()
-	option := Option{OptionName: name}
-	o.QueryTable(TABLE_NAME_OPTION).Filter("OptionName", name).One(&option)
-	return &option
+	option := NewOption(name)
+	o.QueryTable(TABLE_NAME_OPTION).Filter("OptionName", name).One(option)
+	return option
 }
 
 func (this *OptionModel) Names(names *[]string) map[string]*Option {
@@ -62,7 +70,7 @@ func (this *OptionModel) Names(names *[]string) map[string]*Option {
 	}
 	for _, name := range *names {
 		if _, ok := m[name]; !ok {
-			m[name] = &Option{}
+			m[name] = NewOption(name)
 		}
 	}
 	return m

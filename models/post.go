@@ -1,7 +1,7 @@
 package models
 
 import (
-	_ "fmt"
+	"fmt"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -36,6 +36,10 @@ func NewPost() *Post {
 
 func (this *Post) TableName() string {
 	return TABLE_NAME_POST
+}
+
+func (this *Post) PostLink() string {
+	return fmt.Sprintf("/post/%s", this.PostSlug)
 }
 
 type PostModel struct {

@@ -9,6 +9,9 @@ func init() {
 	// home
 	beego.Router("/", &controllers.MainController{})
 
+	// feed
+	beego.Router("/rss", &controllers.FeedController{}, "get:RSS")
+
 	// author
 	beego.Router("/author/:id([0-9]+)", &controllers.AuthorController{})
 

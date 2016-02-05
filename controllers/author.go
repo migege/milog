@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/migege/milog/models"
 	"strconv"
+
+	"github.com/astaxie/beego/utils/pagination"
+	"github.com/migege/milog/models"
 )
 
 type AuthorController struct {
@@ -15,7 +17,17 @@ func (this *AuthorController) Get() {
 
 	author_id_str := this.Ctx.Input.Param(":id")
 	author_id, _ := strconv.Atoi(author_id_str)
-	posts := models.NewPostModel().ByAuthorId(author_id, "-PostId")
+
+	post_count, err := models.NewPostModel().Count("Author__AuthorId", author_id)
+	if err != nil {
+		panic(err)
+	}
+	paginator := pagination.SetPaginator(this.Ctx, postsPerPage, post_count)
+
+	posts, err := models.NewPostModel().ByAuthorId(author_id, "-PostId", paginator.Offset(), postsPerPage)
+	if err != nil {
+		panic(err)
+	}
 	this.Data["Posts"] = posts
 
 	author := &models.Author{}

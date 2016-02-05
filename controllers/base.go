@@ -2,16 +2,18 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/astaxie/beego"
-	"github.com/migege/milog/models"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/migege/milog/models"
 )
 
 var (
-	blogTitle string
-	blogDesc  string
-	blogUrl   string
+	blogTitle    string
+	blogDesc     string
+	blogUrl      string
+	postsPerPage int
 )
 
 type BaseController struct {
@@ -30,10 +32,14 @@ func (this *BaseController) Prepare() {
 		models.OPTION_BLOG_TITLE,
 		models.OPTION_BLOG_DESC,
 		models.OPTION_BLOG_URL,
+		models.OPTION_POSTS_PER_PAGE,
 	})
 	blogTitle = options[models.OPTION_BLOG_TITLE].OptionValue
 	blogDesc = options[models.OPTION_BLOG_DESC].OptionValue
 	blogUrl = options[models.OPTION_BLOG_URL].OptionValue
+	if postsPerPage, _ = options[models.OPTION_POSTS_PER_PAGE].GetInt(); postsPerPage < 1 {
+		postsPerPage = 10
+	}
 
 	this.Data["BlogTitle"] = blogTitle
 	this.Data["BlogDesc"] = blogDesc

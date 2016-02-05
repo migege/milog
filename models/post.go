@@ -2,8 +2,9 @@ package models
 
 import (
 	_ "fmt"
-	"github.com/astaxie/beego/orm"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 const (
@@ -44,9 +45,12 @@ func NewPostModel() *PostModel {
 	return new(PostModel)
 }
 
-func (this *PostModel) Count() (int64, error) {
-	count, err := ORM().QueryTable(TABLE_NAME_POST).Count()
-	return count, err
+func (this *PostModel) Count(filter string, v interface{}) (int64, error) {
+	if filter != "" {
+		return ORM().QueryTable(TABLE_NAME_POST).Filter(filter, v).Count()
+	} else {
+		return ORM().QueryTable(TABLE_NAME_POST).Count()
+	}
 }
 
 func (this *PostModel) Offset(orderby string, offset, limit int) ([]*Post, error) {
@@ -103,24 +107,24 @@ func (this *PostModel) BySlug(post_slug string) (*Post, error) {
 	return post, err
 }
 
-func (this *PostModel) ByAuthorId(author_id int, orderby string) []*Post {
+func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit int) ([]*Post, error) {
 	o := ORM()
 	var posts []*Post
-	o.QueryTable(TABLE_NAME_POST).Filter("Author__AuthorId", author_id).OrderBy(orderby).RelatedSel().All(&posts)
-	return posts
+	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Author__AuthorId", author_id).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
+	return posts, err
 }
 
-func (this *PostModel) ByTagName(tag_name, orderby string) []*Post {
+func (this *PostModel) ByTagName(tag_name, orderby string, offset, limit int) ([]*Post, error) {
 	o := ORM()
 	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Tags__Tag__TagName", tag_name).RelatedSel().OrderBy(orderby).All(&posts)
+	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Tags__Tag__TagName", tag_name).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
 	if err != nil {
-		panic(err)
+		return posts, err
 	}
 	for _, post := range posts {
-		_, err = o.LoadRelated(post, "Tags")
+		o.LoadRelated(post, "Tags")
 	}
-	return posts
+	return posts, err
 }
 
 func (this *PostModel) PostNew(post *Post) (int64, error) {

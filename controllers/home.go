@@ -10,14 +10,13 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	posts_per_page := 10
-	post_count, err := models.NewPostModel().Count()
+	post_count, err := models.NewPostModel().Count("", "")
 	if err != nil {
 		panic(err)
 	}
-	paginator := pagination.SetPaginator(this.Ctx, posts_per_page, post_count)
+	paginator := pagination.SetPaginator(this.Ctx, postsPerPage, post_count)
 
-	posts, err := models.NewPostModel().Offset("-PostId", paginator.Offset(), posts_per_page)
+	posts, err := models.NewPostModel().Offset("-PostId", paginator.Offset(), postsPerPage)
 	if err != nil {
 		panic(err)
 	}

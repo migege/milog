@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+
 	"github.com/migege/milog/models"
 )
 
@@ -27,6 +28,7 @@ func (this *OptionController) Basic() {
 		models.OPTION_BLOG_DESC,
 		models.OPTION_BLOG_URL,
 		models.OPTION_COMMENT_DEFAULT_STATUS,
+		models.OPTION_POSTS_PER_PAGE,
 	}
 	this.setOptionsData(&names)
 }

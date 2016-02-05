@@ -13,11 +13,7 @@
   </form>
   <h3>Posts</h3>
   <div class="posts">
-    {{range .Posts}}
-    <div>
-      <a href="/post/{{.PostSlug}}"><h2>{{.PostTitle}}</h2></a>
-    </div>
-    {{end}}
+  {{template "posts.tpl" .}}
   </div>
 </div>
 {{template "sidebar.tpl" .}}

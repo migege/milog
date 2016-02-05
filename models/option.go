@@ -1,8 +1,10 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
 	"net/url"
+	"strconv"
+
+	"github.com/astaxie/beego/orm"
 )
 
 const (
@@ -14,6 +16,7 @@ const (
 	OPTION_BLOG_DESC              = "blog_desc"
 	OPTION_BLOG_URL               = "blog_url"
 	OPTION_COMMENT_DEFAULT_STATUS = "comment_default_status"
+	OPTION_POSTS_PER_PAGE         = "posts_per_page"
 )
 
 type Option struct {
@@ -25,6 +28,10 @@ type Option struct {
 
 func (this *Option) TableName() string {
 	return TABLE_NAME_OPTION
+}
+
+func (this *Option) GetInt() (int, error) {
+	return strconv.Atoi(this.OptionValue)
 }
 
 type OptionModel struct {
@@ -49,9 +56,14 @@ func (this *OptionModel) Names(names *[]string) map[string]*Option {
 		panic(err)
 	}
 
-	m := make(map[string]*Option)
+	m := make(map[string]*Option, len(*names))
 	for _, option := range options {
 		m[option.OptionName] = option
+	}
+	for _, name := range *names {
+		if _, ok := m[name]; !ok {
+			m[name] = &Option{}
+		}
 	}
 	return m
 }

@@ -45,10 +45,9 @@ type RSSChannel struct {
 	ChannelTitle string   `xml:"title"`
 	ChannelLink  string   `xml:"link"`
 	ChannelDesc  string   `xml:"description"`
-	//ChannelEditor string   `xml:"managingEditor"`
-	PubDate  string `xml:"pubDate"`
-	Self     *RSSSelf
-	RSSPosts []*RSSPost
+	PubDate      string   `xml:"pubDate"`
+	Self         *RSSSelf
+	RSSPosts     []*RSSPost
 }
 
 func NewRSSChannel() *RSSChannel {

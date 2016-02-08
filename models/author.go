@@ -41,14 +41,11 @@ func NewAuthorModel() *AuthorModel {
 	return new(AuthorModel)
 }
 
-func (this *AuthorModel) ById(id int) *Author {
+func (this *AuthorModel) ById(id int) (*Author, error) {
 	o := ORM()
 	author := &Author{AuthorId: id}
 	err := o.Read(author)
-	if err != nil {
-		panic(err)
-	}
-	return author
+	return author, err
 }
 
 func (this *AuthorModel) ByName(name string) (*Author, error) {

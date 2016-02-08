@@ -33,11 +33,13 @@ func (this *AuthorController) ById() {
 	author := &models.Author{}
 	if len(posts) > 0 {
 		author = posts[0].Author
-		this.Data["Author"] = author
 	} else {
-		author = models.NewAuthorModel().ById(author_id)
+		author, err = models.NewAuthorModel().ById(author_id)
+		if err != nil {
+			this.Abort("404")
+		}
 	}
-
+	this.Data["Author"] = author
 	this.Data["PageTitle"] = fmt.Sprintf("%s - Author - %s", author.DisplayName, blogTitle)
 }
 
@@ -57,7 +59,7 @@ func (this *AuthorController) ByName() {
 			this.Data["Posts"] = posts
 			this.Data["PageTitle"] = fmt.Sprintf("%s - Author - %s", author.DisplayName, blogTitle)
 		} else {
-			panic(err)
+			this.Abort("404")
 		}
 	} else {
 		panic(err)

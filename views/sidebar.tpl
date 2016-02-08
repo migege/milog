@@ -16,6 +16,16 @@
     {{end}}
     <li class="widget panel panel-default">
       <div class="widget-header panel-heading">
+        <span class="text-uppercase">feed</span>
+      </div>
+      <div class="widget-body panel-body">
+        <ul class="list-unstyled">
+          <li><a href="/feed" title="Log In">RSS</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="widget panel panel-default">
+      <div class="widget-header panel-heading">
         <span class="text-uppercase">miscellaneous</span>
       </div>
       <div class="widget-body panel-body">

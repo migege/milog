@@ -51,14 +51,11 @@ func (this *AuthorModel) ById(id int) *Author {
 	return author
 }
 
-func (this *AuthorModel) ByName(name string) *Author {
+func (this *AuthorModel) ByName(name string) (*Author, error) {
 	author := &Author{AuthorName: name}
 	o := ORM()
 	err := o.QueryTable(TABLE_NAME_AUTHOR).Filter("AuthorName", name).One(author)
-	if err != nil {
-		panic(err)
-	}
-	return author
+	return author, err
 }
 
 // the password is a signature actually, never use plain password

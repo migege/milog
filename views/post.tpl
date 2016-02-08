@@ -8,7 +8,7 @@
       {{str2html .Post.PostContent}}
     </div>
     <div class="post-footer">
-      <span class="label label-default"><a href="/author/{{.Author.AuthorId}}">{{.Author.DisplayName}}</a> posted @ {{.Post.PostTime}}</span>
+      <span class="label label-default"><a href="/author/{{.Author.AuthorName}}">{{.Author.DisplayName}}</a> posted @ {{.Post.PostTime}}</span>
       {{range .Post.Tags}}
       <span class="label label-info"><a href="/tag/{{.TagSlug}}">{{.TagName}}</a></span>
       {{end}}

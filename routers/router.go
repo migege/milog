@@ -11,9 +11,11 @@ func init() {
 
 	// feed
 	beego.Router("/rss", &controllers.FeedController{}, "get:RSS")
+	beego.Router("/feed", &controllers.FeedController{}, "get:RSS")
 
 	// author
-	beego.Router("/author/:id([0-9]+)", &controllers.AuthorController{})
+	beego.Router("/author/:id([0-9]+)", &controllers.AuthorController{}, "get:ById")
+	beego.Router("/author/:name", &controllers.AuthorController{}, "get:ByName")
 
 	// comments
 	beego.Router("/comments-add", &controllers.CommentController{}, "post:DoAddComment")

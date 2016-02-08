@@ -12,7 +12,7 @@ type AuthorController struct {
 	BaseController
 }
 
-func (this *AuthorController) Get() {
+func (this *AuthorController) ById() {
 	this.TplName = "author.tpl"
 
 	author_id_str := this.Ctx.Input.Param(":id")
@@ -39,6 +39,29 @@ func (this *AuthorController) Get() {
 	}
 
 	this.Data["PageTitle"] = fmt.Sprintf("%s - Author - %s", author.DisplayName, blogTitle)
+}
+
+func (this *AuthorController) ByName() {
+	this.TplName = "author.tpl"
+
+	author_name := this.Ctx.Input.Param(":name")
+
+	if post_count, err := models.NewPostModel().Count("Author__AuthorName", author_name); err == nil {
+		paginator := pagination.SetPaginator(this.Ctx, postsPerPage, post_count)
+		if author, err := models.NewAuthorModel().ByName(author_name); err == nil {
+			this.Data["Author"] = author
+			posts, err := models.NewPostModel().ByAuthorId(author.AuthorId, "-PostId", paginator.Offset(), postsPerPage)
+			if err != nil {
+				panic(err)
+			}
+			this.Data["Posts"] = posts
+			this.Data["PageTitle"] = fmt.Sprintf("%s - Author - %s", author.DisplayName, blogTitle)
+		} else {
+			panic(err)
+		}
+	} else {
+		panic(err)
+	}
 }
 
 func (this *AuthorController) Signup() {

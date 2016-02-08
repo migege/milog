@@ -49,15 +49,17 @@ func (this *BaseController) Prepare() {
 	if logged_username == nil {
 		logged_username, res := this.GetSecureCookie(COOKIE_SECURE_KEY_USER, COOKIE_NAME_LOGGED_USER)
 		if res == true {
-			this.SetSession(SESS_NAME, logged_username)
-			logged_user := models.NewAuthorModel().ByName(fmt.Sprintf("%s", logged_username))
+			if logged_user, err := models.NewAuthorModel().ByName(fmt.Sprintf("%s", logged_username)); err == nil {
+				this.SetSession(SESS_NAME, logged_username)
+				this.Data["LoggedUser"] = logged_user
+				this.loggedUser = logged_user
+			}
+		}
+	} else {
+		if logged_user, err := models.NewAuthorModel().ByName(fmt.Sprintf("%s", logged_username)); err == nil {
 			this.Data["LoggedUser"] = logged_user
 			this.loggedUser = logged_user
 		}
-	} else {
-		logged_user := models.NewAuthorModel().ByName(fmt.Sprintf("%s", logged_username))
-		this.Data["LoggedUser"] = logged_user
-		this.loggedUser = logged_user
 	}
 }
 

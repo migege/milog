@@ -27,6 +27,11 @@ func (this *MainController) Get() {
 		this.Data["LatestComments"] = latest_comments
 	}
 
+	links, err := models.NewLinkModel().AllLinks()
+	if err == nil {
+		this.Data["Links"] = links
+	}
+
 	this.Data["PageTitle"] = blogTitle
 	this.TplName = "home.tpl"
 }

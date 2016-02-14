@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -30,6 +31,7 @@ func init() {
 		new(Option),
 		new(Tag),
 		new(TagRelationship),
+		new(Link),
 	)
 	o = orm.NewOrm()
 }

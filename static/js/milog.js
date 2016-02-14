@@ -1,4 +1,8 @@
-$(".post-tags").select2({tags:true})
+$('a.external').click(function(){
+  window.open($(this).attr('href'),'_blank')
+  return false
+})
+$('.post-tags').select2({tags:true})
 $('table').addClass("table table-striped")
 $('#commentform').submit(function(){
   $.ajax({
@@ -45,8 +49,8 @@ $('#loginform').submit(function(){
 })
 function logout(){
   $.ajax({
-    url:"/logout",
-    type:"get",
+    url:'/logout',
+    type:'get',
     success:function(res){
       if(res.Code==0){
         window.location.href='/login'

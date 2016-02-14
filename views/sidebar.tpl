@@ -24,6 +24,20 @@
         </ul>
       </div>
     </li>
+    {{if .Links}}
+    <li class="widget panel panel-default">
+      <div class="widget-header panel-heading">
+        <span class="text-uppercase">links</span>
+      </div>
+      <div class="widget-body panel-body">
+        <ul class="list-unstyled">
+        {{range .Links}}
+          <li><a rel="nofollow" href="{{.LinkUrl}}" title="{{.LinkDesc}}" class="external">{{.LinkText}}</a></li>
+        {{end}}
+        </ul>
+      </div>
+    </li>
+    {{end}}
     <li class="widget panel panel-default">
       <div class="widget-header panel-heading">
         <span class="text-uppercase">miscellaneous</span>

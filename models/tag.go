@@ -54,12 +54,9 @@ func (this *TagModel) AddTags(tags []*Tag) {
 	}
 }
 
-func (this *TagModel) AllTags() []*Tag {
+func (this *TagModel) AllTags() ([]*Tag, error) {
 	o := ORM()
 	var tags []*Tag
 	_, err := o.QueryTable(TABLE_NAME_TAG).All(&tags)
-	if err != nil {
-		panic(err)
-	}
-	return tags
+	return tags, err
 }

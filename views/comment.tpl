@@ -3,7 +3,7 @@
     {{range .Comments}}
     <div class="comment" id="comment-{{.CommentId}}">
       <div class="comment-header">
-        <span><a href="{{.CommentAuthorUrl}}" rel="nofollow">{{.CommentAuthor}}</a>&nbsp;@&nbsp;<a href="#comment-{{.CommentId}}">{{.CommentTime}}</a>&nbsp;<a href="javascript:void(0);" onclick="javascript:reply({{.CommentId}});">reply</a></span>
+        <span><a href="{{.CommentAuthorUrl}}" rel="nofollow" class="external">{{.CommentAuthor}}</a>&nbsp;@&nbsp;<a href="#comment-{{.CommentId}}">{{.CommentTime}}</a>&nbsp;<a href="javascript:void(0);" onclick="javascript:reply({{.CommentId}});">reply</a></span>
       </div>
       <div class="comment-body">
         <p>{{.CommentContent}}</p>

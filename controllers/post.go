@@ -3,10 +3,11 @@ package controllers
 import (
 	"errors"
 	"fmt"
-	"github.com/migege/milog/models"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/migege/milog/models"
 )
 
 type PostController struct {
@@ -51,15 +52,15 @@ func (this *PostController) ById() {
 	post_id, _ := strconv.Atoi(id_str)
 	post, err := models.NewPostModel().ById(post_id)
 	if err != nil {
-		this.Abort("404")
+		panic(err)
 	}
-	this.setPost(post)
+	this.Redirect(post.PostLink(), 301)
 }
 
 func (this *PostController) PostNew() {
 	this.CheckLogged()
 	this.TplName = "admin-post.tpl"
-	tags := models.NewTagModel().AllTags()
+	tags, _ := models.NewTagModel().AllTags()
 	this.Data["AllTags"] = tags
 	this.Data["PageTitle"] = fmt.Sprintf("New Post - Admin - %s", blogTitle)
 }
@@ -104,7 +105,7 @@ func (this *PostController) DoPostNew() {
 	if err != nil {
 		panic(err)
 	} else {
-		this.goToPost(post)
+		this.Redirect(post.PostLink(), 302)
 	}
 }
 
@@ -121,7 +122,7 @@ func (this *PostController) PostEdit() {
 		panic(errors.New("error: can't edit another one's post"))
 	}
 
-	tags := models.NewTagModel().AllTags()
+	tags, _ := models.NewTagModel().AllTags()
 	this.Data["Post"] = post
 	this.Data["AllTags"] = tags
 	this.Data["PageTitle"] = fmt.Sprintf("Editing Post: %s - %s", post.PostTitle, blogTitle)
@@ -174,9 +175,5 @@ func (this *PostController) DoPostEdit() {
 	if err != nil {
 		panic(err)
 	}
-	this.goToPost(post)
-}
-
-func (this *PostController) goToPost(post *models.Post) {
-	this.Redirect(fmt.Sprintf("/post/%s", post.PostSlug), 302)
+	this.Redirect(post.PostLink(), 302)
 }

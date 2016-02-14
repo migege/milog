@@ -13,34 +13,13 @@ type AuthorController struct {
 }
 
 func (this *AuthorController) ById() {
-	this.TplName = "author.tpl"
-
 	author_id_str := this.Ctx.Input.Param(":id")
 	author_id, _ := strconv.Atoi(author_id_str)
-
-	post_count, err := models.NewPostModel().Count("Author__AuthorId", author_id)
+	author, err := models.NewAuthorModel().ById(author_id)
 	if err != nil {
 		panic(err)
 	}
-	paginator := pagination.SetPaginator(this.Ctx, postsPerPage, post_count)
-
-	posts, err := models.NewPostModel().ByAuthorId(author_id, "-PostId", paginator.Offset(), postsPerPage)
-	if err != nil {
-		panic(err)
-	}
-	this.Data["Posts"] = posts
-
-	author := &models.Author{}
-	if len(posts) > 0 {
-		author = posts[0].Author
-	} else {
-		author, err = models.NewAuthorModel().ById(author_id)
-		if err != nil {
-			this.Abort("404")
-		}
-	}
-	this.Data["Author"] = author
-	this.Data["PageTitle"] = fmt.Sprintf("%s - Author - %s", author.DisplayName, blogTitle)
+	this.Redirect(fmt.Sprintf("/author/%s", author.AuthorName), 301)
 }
 
 func (this *AuthorController) ByName() {

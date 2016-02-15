@@ -115,6 +115,12 @@ func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit i
 	o := ORM()
 	var posts []*Post
 	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Author__AuthorId", author_id).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
+	if err != nil {
+		return posts, err
+	}
+	for _, post := range posts {
+		_, err = o.LoadRelated(post, "Tags")
+	}
 	return posts, err
 }
 

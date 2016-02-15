@@ -19,12 +19,14 @@ var (
 type BaseController struct {
 	beego.Controller
 	loggedUser *models.Author
+	startTime  time.Time
 }
 
 func init() {
 }
 
 func (this *BaseController) Prepare() {
+	this.startTime = time.Now()
 	ts := strconv.FormatInt(time.Now().UnixNano(), 10)
 	this.Data["TimeStamp"] = ts
 
@@ -61,6 +63,11 @@ func (this *BaseController) Prepare() {
 			this.loggedUser = logged_user
 		}
 	}
+}
+
+func (this *BaseController) Render() error {
+	this.Data["Duration"] = time.Since(this.startTime).String()
+	return this.Controller.Render()
 }
 
 func (this *BaseController) CheckLogged() {

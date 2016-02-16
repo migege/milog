@@ -25,6 +25,6 @@ func (this *ErrorController) Error404() {
 
 	this.Data["Posts"] = posts
 	this.Data["PageTitle"] = blogTitle
-	this.Data["Content"] = "404 出错啦，不如看看其它内容吧。"
+	this.Data["Content"] = "404 - 您要找的页面不见啦，不如看看其它内容吧"
 	this.TplName = "404.tpl"
 }

@@ -17,7 +17,7 @@ func (this *AuthorController) ById() {
 	author_id, _ := strconv.Atoi(author_id_str)
 	author, err := models.NewAuthorModel().ById(author_id)
 	if err != nil {
-		panic(err)
+		this.Abort("404")
 	}
 	this.Redirect(fmt.Sprintf("/author/%s", author.AuthorName), 301)
 }

@@ -38,10 +38,14 @@ func init() {
 	// posts
 	beego.Router("/post/:id([0-9]+)", &controllers.PostController{}, "get:ById")
 	beego.Router("/post/:slug", &controllers.PostController{}, "get:BySlug")
+
 	beego.Router("/admin/post-new", &controllers.PostController{}, "get:PostNew")
 	beego.Router("/admin/post-new", &controllers.PostController{}, "post:DoPostNew")
+
 	beego.Router("/admin/post-edit/:id([0-9]+)", &controllers.PostController{}, "get:PostEdit")
 	beego.Router("/admin/post-edit", &controllers.PostController{}, "post:DoPostEdit")
+
+	beego.Router("/admin/post-delete/:id([0-9]+)", &controllers.PostController{}, "get:PostDelete")
 
 	// tags
 	beego.Router("/tag/:tag([\\w]+)", &controllers.TagController{}, "get:ByName")

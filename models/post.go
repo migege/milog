@@ -19,6 +19,7 @@ type Post struct {
 	PostContentMd    string
 	PostTime         string `orm:"auto_now_add;type(datetime)"`
 	PostModifiedTime string `orm:"auto_now;type(datetime)"`
+	PostStatus       int    `orm:"default(0)"`
 	CommentStatus    int
 	CommentCount     int
 	Author           *Author `orm:"rel(fk);on_delete(do_nothing)"`
@@ -42,6 +43,12 @@ func (this *Post) PostLink() string {
 	return fmt.Sprintf("/post/%s", this.PostSlug)
 }
 
+func (this *Post) Update(cols ...string) error {
+	o := ORM()
+	_, err := o.Update(this, cols...)
+	return err
+}
+
 type PostModel struct {
 }
 
@@ -51,16 +58,16 @@ func NewPostModel() *PostModel {
 
 func (this *PostModel) Count(filter string, v interface{}) (int64, error) {
 	if filter != "" {
-		return ORM().QueryTable(TABLE_NAME_POST).Filter(filter, v).Count()
+		return ORM().QueryTable(TABLE_NAME_POST).Filter(filter, v).Filter("PostStatus", 0).Count()
 	} else {
-		return ORM().QueryTable(TABLE_NAME_POST).Count()
+		return ORM().QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).Count()
 	}
 }
 
 func (this *PostModel) Offset(orderby string, offset, limit int) ([]*Post, error) {
 	o := ORM()
 	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
+	_, err := o.QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
 	if err != nil {
 		return posts, err
 	}
@@ -73,7 +80,7 @@ func (this *PostModel) Offset(orderby string, offset, limit int) ([]*Post, error
 func (this *PostModel) All(orderby string) []*Post {
 	o := ORM()
 	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).OrderBy(orderby).RelatedSel().All(&posts)
+	_, err := o.QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).OrderBy(orderby).RelatedSel().All(&posts)
 	if err != nil {
 		panic(err)
 	}
@@ -86,7 +93,7 @@ func (this *PostModel) All(orderby string) []*Post {
 func (this *PostModel) ById(id int) (*Post, error) {
 	o := ORM()
 	post := &Post{PostId: id}
-	err := o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).RelatedSel().One(post)
+	err := o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).Filter("PostStatus", 0).RelatedSel().One(post)
 	if err != nil {
 		return post, err
 	}
@@ -100,7 +107,7 @@ func (this *PostModel) ById(id int) (*Post, error) {
 func (this *PostModel) BySlug(post_slug string) (*Post, error) {
 	o := ORM()
 	post := &Post{PostSlug: post_slug}
-	err := o.QueryTable(TABLE_NAME_POST).Filter("PostSlug", post_slug).RelatedSel().One(post)
+	err := o.QueryTable(TABLE_NAME_POST).Filter("PostSlug", post_slug).Filter("PostStatus", 0).RelatedSel().One(post)
 	if err != nil {
 		return post, err
 	}
@@ -114,7 +121,7 @@ func (this *PostModel) BySlug(post_slug string) (*Post, error) {
 func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit int) ([]*Post, error) {
 	o := ORM()
 	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Author__AuthorId", author_id).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
+	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Author__AuthorId", author_id).Filter("PostStatus", 0).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
 	if err != nil {
 		return posts, err
 	}
@@ -127,7 +134,7 @@ func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit i
 func (this *PostModel) ByTagName(tag_name, orderby string, offset, limit int) ([]*Post, error) {
 	o := ORM()
 	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Tags__Tag__TagName", tag_name).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
+	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Tags__Tag__TagName", tag_name).Filter("PostStatus", 0).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
 	if err != nil {
 		return posts, err
 	}

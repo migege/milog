@@ -52,7 +52,7 @@ func (this *PostController) ById() {
 	post_id, _ := strconv.Atoi(id_str)
 	post, err := models.NewPostModel().ById(post_id)
 	if err != nil {
-		panic(err)
+		this.Abort("404")
 	}
 	this.Redirect(post.PostLink(), 301)
 }
@@ -176,4 +176,23 @@ func (this *PostController) DoPostEdit() {
 		panic(err)
 	}
 	this.Redirect(post.PostLink(), 302)
+}
+
+func (this *PostController) PostDelete() {
+	this.CheckLogged()
+	id := this.Ctx.Input.Param(":id")
+	post_id, err := strconv.Atoi(id)
+	if err != nil {
+		panic(err)
+	}
+	post, err := models.NewPostModel().ById(post_id)
+	if err != nil {
+		panic(err)
+	}
+	post.PostStatus = -1
+	err = post.Update("PostStatus")
+	if err != nil {
+		panic(err)
+	}
+	this.Redirect("/admin", 302)
 }

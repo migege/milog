@@ -35,6 +35,9 @@
         <button type="submit" class="btn btn-primary">Post</button>
         <input type="hidden" id="post-id" name="post-id" value="{{.Post.PostId}}" />
         <input type="hidden" id="post-content" name="post-content" value="" />
+        {{if .Post.PostId}}
+        <a class="btn btn-danger pull-right" href="/admin/post-delete/{{.Post.PostId}}">Delete</a>
+        {{end}}
       </p>
     </form>
   </div>

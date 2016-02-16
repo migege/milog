@@ -46,6 +46,7 @@ func init() {
 	beego.Router("/admin/post-edit", &controllers.PostController{}, "post:DoPostEdit")
 
 	beego.Router("/admin/post-delete/:id([0-9]+)", &controllers.PostController{}, "get:PostDelete")
+	beego.Router("/admin/post-restore/:id([0-9]+)", &controllers.PostController{}, "get:PostRestore")
 
 	// tags
 	beego.Router("/tag/:tag([\\w]+)", &controllers.TagController{}, "get:ByName")

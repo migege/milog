@@ -36,7 +36,12 @@
         <input type="hidden" id="post-id" name="post-id" value="{{.Post.PostId}}" />
         <input type="hidden" id="post-content" name="post-content" value="" />
         {{if .Post.PostId}}
+          {{if eq .Post.PostStatus -1}}
+        <a class="btn btn-warning pull-right" href="/admin/post-restore/{{.Post.PostId}}">Restore</a>
+          {{end}}
+          {{if eq .Post.PostStatus 0}}
         <a class="btn btn-danger pull-right" href="/admin/post-delete/{{.Post.PostId}}">Delete</a>
+          {{end}}
         {{end}}
       </p>
     </form>

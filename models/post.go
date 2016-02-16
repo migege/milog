@@ -90,15 +90,24 @@ func (this *PostModel) All(orderby string) []*Post {
 	return posts
 }
 
-func (this *PostModel) ById(id int) (*Post, error) {
+func (this *PostModel) ById(id int, ignorePostStatus ...bool) (*Post, error) {
 	o := ORM()
 	post := &Post{PostId: id}
-	err := o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).Filter("PostStatus", 0).RelatedSel().One(post)
-	if err != nil {
-		return post, err
+	var err error
+	ignore := false
+	if len(ignorePostStatus) > 0 {
+		ignore = ignorePostStatus[0]
 	}
-	_, err = o.LoadRelated(post, "Tags")
-	if err != nil {
+	if ignore == true {
+		if err = o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).RelatedSel().One(post); err != nil {
+			return post, err
+		}
+	} else {
+		if err = o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).Filter("PostStatus", 0).RelatedSel().One(post); err != nil {
+			return post, err
+		}
+	}
+	if _, err = o.LoadRelated(post, "Tags"); err != nil {
 		return post, err
 	}
 	return post, err

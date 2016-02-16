@@ -115,7 +115,7 @@ func (this *PostController) PostEdit() {
 	id := this.Ctx.Input.Param(":id")
 	post_id, _ := strconv.Atoi(id)
 
-	post, err := models.NewPostModel().ById(post_id)
+	post, err := models.NewPostModel().ById(post_id, true)
 	if err != nil {
 		panic(err)
 	} else if post.Author.AuthorId != this.loggedUser.AuthorId {
@@ -190,6 +190,25 @@ func (this *PostController) PostDelete() {
 		panic(err)
 	}
 	post.PostStatus = -1
+	err = post.Update("PostStatus")
+	if err != nil {
+		panic(err)
+	}
+	this.Redirect("/admin", 302)
+}
+
+func (this *PostController) PostRestore() {
+	this.CheckLogged()
+	id := this.Ctx.Input.Param(":id")
+	post_id, err := strconv.Atoi(id)
+	if err != nil {
+		panic(err)
+	}
+	post, err := models.NewPostModel().ById(post_id, true)
+	if err != nil {
+		panic(err)
+	}
+	post.PostStatus = 0
 	err = post.Update("PostStatus")
 	if err != nil {
 		panic(err)

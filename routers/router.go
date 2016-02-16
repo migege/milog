@@ -13,7 +13,7 @@ func init() {
 	beego.Router("/rss", &controllers.FeedController{}, "get:RSS")
 	beego.Router("/feed", &controllers.FeedController{}, "get:RSS")
 
-	// author
+	// authors
 	beego.Router("/author/:id([0-9]+)", &controllers.AuthorController{}, "get:ById")
 	beego.Router("/author/:name", &controllers.AuthorController{}, "get:ByName")
 
@@ -28,26 +28,27 @@ func init() {
 	// signup
 	beego.Router("/signup", &controllers.AuthorController{}, "get:Signup")
 
-	// admin pages
-	beego.Router("/admin", &controllers.AdminController{})
-
-	// options
-	beego.Router("/admin/options", &controllers.OptionController{}, "get:Basic")
-	beego.Router("/admin/option-edit", &controllers.OptionController{}, "post:DoEdit")
+	// tags
+	beego.Router("/tag/:tag([\\w]+)", &controllers.TagController{}, "get:ByName")
 
 	// posts
 	beego.Router("/post/:id([0-9]+)", &controllers.PostController{}, "get:ById")
 	beego.Router("/post/:slug", &controllers.PostController{}, "get:BySlug")
 
-	beego.Router("/admin/post-new", &controllers.PostController{}, "get:PostNew")
-	beego.Router("/admin/post-new", &controllers.PostController{}, "post:DoPostNew")
+	///////////////////////////////////////////////////////////////////
+	// admin pages begin
+	beego.Router("/admin", &controllers.AdminController{})
 
-	beego.Router("/admin/post-edit/:id([0-9]+)", &controllers.PostController{}, "get:PostEdit")
-	beego.Router("/admin/post-edit", &controllers.PostController{}, "post:DoPostEdit")
+	beego.Router("/admin/options", &controllers.OptionController{}, "get:Basic")
+	beego.Router("/admin/option-edit", &controllers.OptionController{}, "post:DoEdit")
 
-	beego.Router("/admin/post-delete/:id([0-9]+)", &controllers.PostController{}, "get:PostDelete")
-	beego.Router("/admin/post-restore/:id([0-9]+)", &controllers.PostController{}, "get:PostRestore")
-
-	// tags
-	beego.Router("/tag/:tag([\\w]+)", &controllers.TagController{}, "get:ByName")
+	beego.Router("/admin/posts", &controllers.AdminController{}, "get:AllPosts")
+	beego.Router("/admin/post-new", &controllers.AdminController{}, "get:PostNew")
+	beego.Router("/admin/post-new", &controllers.AdminController{}, "post:DoPostNew")
+	beego.Router("/admin/post-edit/:id([0-9]+)", &controllers.AdminController{}, "get:PostEdit")
+	beego.Router("/admin/post-edit", &controllers.AdminController{}, "post:DoPostEdit")
+	beego.Router("/admin/post-delete/:id([0-9]+)", &controllers.AdminController{}, "get:PostDelete")
+	beego.Router("/admin/post-restore/:id([0-9]+)", &controllers.AdminController{}, "get:PostRestore")
+	// admin pages end
+	///////////////////////////////////////////////////////////////////
 }

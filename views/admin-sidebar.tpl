@@ -6,6 +6,7 @@
       </div>
       <div class="widget-body panel-body">
         <ul class="list-unstyled">
+          <li><a href="/admin/posts" title="All posts">All Posts <span class="badge">{{.PostCount}}</span></a></li>
           <li><a href="/admin/post-new" title="New post">New Post</a></li>
         </ul>
       </div>

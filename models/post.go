@@ -45,6 +45,8 @@ func (this *Post) PostLink() string {
 
 func (this *Post) Update(cols ...string) error {
 	o := ORM()
+	this.PostModifiedTime = time.Now().Format("2006-01-02 15:04:05")
+	cols = append(cols, "PostModifiedTime")
 	_, err := o.Update(this, cols...)
 	return err
 }
@@ -77,12 +79,22 @@ func (this *PostModel) Offset(orderby string, offset, limit int) ([]*Post, error
 	return posts, err
 }
 
-func (this *PostModel) All(orderby string) []*Post {
+func (this *PostModel) All(orderby string, ignorePostStatus ...bool) []*Post {
 	o := ORM()
 	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).OrderBy(orderby).RelatedSel().All(&posts)
-	if err != nil {
-		panic(err)
+	var err error
+	ignore := false
+	if len(ignorePostStatus) > 0 {
+		ignore = ignorePostStatus[0]
+	}
+	if ignore == true {
+		if _, err = o.QueryTable(TABLE_NAME_POST).OrderBy(orderby).RelatedSel().All(&posts); err != nil {
+			panic(err)
+		}
+	} else {
+		if _, err = o.QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).OrderBy(orderby).RelatedSel().All(&posts); err != nil {
+			panic(err)
+		}
 	}
 	for _, post := range posts {
 		_, err = o.LoadRelated(post, "Tags")

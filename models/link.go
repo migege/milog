@@ -9,6 +9,7 @@ type Link struct {
 	LinkText string `orm:"size(128)"`
 	LinkUrl  string `orm:"size(128)"`
 	LinkDesc string `orm:"size(128)"`
+	LinkRank int    `orm:"default(0)"`
 }
 
 func NewLink() *Link {
@@ -29,6 +30,6 @@ func NewLinkModel() *LinkModel {
 func (this *LinkModel) AllLinks() ([]*Link, error) {
 	o := ORM()
 	var links []*Link
-	_, err := o.QueryTable(TABLE_NAME_LINK).All(&links)
+	_, err := o.QueryTable(TABLE_NAME_LINK).OrderBy("LinkRank").All(&links)
 	return links, err
 }

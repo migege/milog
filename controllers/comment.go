@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"errors"
-	_ "fmt"
+	"strconv"
+
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/utils/captcha"
 	"github.com/migege/milog/models"
-	"strconv"
 )
 
 var (

@@ -1,9 +1,10 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 const (

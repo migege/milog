@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/migege/milog/models"
+	"github.com/mssola/user_agent"
 )
 
 type PostController struct {
@@ -37,11 +38,19 @@ func (this *PostController) setPost(post *models.Post) {
 
 func (this *PostController) BySlug() {
 	post_slug := this.Ctx.Input.Param(":slug")
-	post, err := models.NewPostModel().BySlug(post_slug)
+	post_model := models.NewPostModel()
+	post, err := post_model.BySlug(post_slug)
 	if err != nil {
 		this.Abort("404")
 	}
 	this.setPost(post)
+
+	ua := user_agent.New(this.Ctx.Request.UserAgent())
+	if ua.Bot() {
+		post_model.ViewedBy(post.PostId, "bot")
+	} else {
+		post_model.ViewedBy(post.PostId, "human")
+	}
 }
 
 func (this *PostController) ById() {

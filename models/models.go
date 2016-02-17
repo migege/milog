@@ -32,6 +32,7 @@ func init() {
 		new(Tag),
 		new(TagRelationship),
 		new(Link),
+		new(PostViews),
 	)
 	o = orm.NewOrm()
 }

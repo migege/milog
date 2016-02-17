@@ -46,11 +46,11 @@
       </p>
     </form>
   </div>
-<script type="text/javascript" src="/static/js/markdown.min.js"></script>
+<script type="text/javascript" src="/static/js/marked.min.js"></script>
 <script type="text/javascript">
 function Editor(input,preview,output){
   this.update=function(){
-    preview.innerHTML=markdown.toHTML(input.value,"Maruku")
+    preview.innerHTML=marked(input.value)
     output.value=preview.innerHTML
   }
   input.editor=this

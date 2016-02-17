@@ -1,5 +1,13 @@
 <div class="col-xs-6 col-md-3" id="sidebar">
   <ul class="list-unstyled">
+    <li class="widget panel panel-default">
+      <div class="widget-header panel-heading">
+        <span class="text-uppercase">扫描关注微信</span>
+      </div>
+      <div class="widget-body panel-body">
+        <img class="img-responsive" src="http://pic.yupoo.com/evitc_v/FkJhiBTL/GcNUy.jpg" alt="brokendreamscoffee" />
+      </div>
+    </li>
     {{if .LatestComments}}
     <li class="widget panel panel-default">
       <div class="widget-header panel-heading">
@@ -20,7 +28,7 @@
       </div>
       <div class="widget-body panel-body">
         <ul class="list-unstyled">
-          <li><a href="/feed" title="Log In">RSS</a></li>
+          <li><a href="/feed" title="RSS Feed">RSS</a></li>
         </ul>
       </div>
     </li>

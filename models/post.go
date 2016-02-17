@@ -22,8 +22,9 @@ type Post struct {
 	PostStatus       int    `orm:"default(0)"`
 	CommentStatus    int
 	CommentCount     int
-	Author           *Author `orm:"rel(fk);on_delete(do_nothing)"`
-	Tags             []*Tag  `orm:"rel(m2m);rel_through(github.com/migege/milog/models.TagRelationship)"`
+	Author           *Author      `orm:"rel(fk);on_delete(do_nothing)"`
+	Tags             []*Tag       `orm:"rel(m2m);rel_through(github.com/migege/milog/models.TagRelationship)"`
+	PostViews        []*PostViews `orm:"reverse(many)"`
 }
 
 func NewPost() *Post {
@@ -79,13 +80,25 @@ func (this *PostModel) Offset(orderby string, offset, limit int) ([]*Post, error
 	return posts, err
 }
 
-func (this *PostModel) All(orderby string, ignorePostStatus ...bool) []*Post {
+func (this *PostModel) All(orderby string, args ...interface{}) []*Post {
 	o := ORM()
 	var posts []*Post
 	var err error
+
 	ignore := false
-	if len(ignorePostStatus) > 0 {
-		ignore = ignorePostStatus[0]
+	load_views := false
+
+	for i, arg := range args {
+		switch i {
+		case 0:
+			if v, ok := arg.(bool); ok {
+				ignore = v
+			}
+		case 1:
+			if v, ok := arg.(bool); ok {
+				load_views = v
+			}
+		}
 	}
 	if ignore == true {
 		if _, err = o.QueryTable(TABLE_NAME_POST).OrderBy(orderby).RelatedSel().All(&posts); err != nil {
@@ -97,7 +110,10 @@ func (this *PostModel) All(orderby string, ignorePostStatus ...bool) []*Post {
 		}
 	}
 	for _, post := range posts {
-		_, err = o.LoadRelated(post, "Tags")
+		o.LoadRelated(post, "Tags")
+		if load_views {
+			o.LoadRelated(post, "PostViews")
+		}
 	}
 	return posts
 }
@@ -132,8 +148,7 @@ func (this *PostModel) BySlug(post_slug string) (*Post, error) {
 	if err != nil {
 		return post, err
 	}
-	_, err = o.LoadRelated(post, "Tags")
-	if err != nil {
+	if _, err = o.LoadRelated(post, "Tags"); err != nil {
 		return post, err
 	}
 	return post, err

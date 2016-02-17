@@ -7,6 +7,7 @@
         <th>#</th>
         <th>Title</th>
         <th>Status</th>
+        <th>Views</th>
         <th>Created</th>
         <th>Modified</th>
       </tr>
@@ -21,6 +22,7 @@
         {{else}}
         <td><a title="Edit" href="/admin/post-edit/{{.PostId}}" class="btn btn-xs btn-success">Posted</a></td>
         {{end}}
+        <td>{{index $.Views .PostId}}</td>
         <td>{{.PostTime}}</td>
         <td>{{.PostModifiedTime}}</td>
       </tr>

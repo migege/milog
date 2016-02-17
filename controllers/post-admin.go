@@ -13,8 +13,19 @@ import (
 func (this *AdminController) AllPosts() {
 	this.TplName = "admin-posts.tpl"
 	this.Data["PageTitle"] = fmt.Sprintf("All Posts - %s - Admin - %s", this.loggedUser.DisplayName, blogTitle)
-	posts := models.NewPostModel().All("-PostId", true)
+	posts := models.NewPostModel().All("-PostId", true, true)
 	this.Data["Posts"] = posts
+
+	views := make(map[int]int)
+	for _, post := range posts {
+		for _, view := range post.PostViews {
+			if view.ViewedBy == "human" {
+				views[post.PostId] = view.Views
+				break
+			}
+		}
+	}
+	this.Data["Views"] = views
 }
 
 func (this *AdminController) PostNew() {

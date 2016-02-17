@@ -7,25 +7,35 @@ import (
 	"strings"
 	"time"
 
+	"github.com/astaxie/beego/utils/pagination"
 	"github.com/migege/milog/models"
 )
 
 func (this *AdminController) AllPosts() {
 	this.TplName = "admin-posts.tpl"
 	this.Data["PageTitle"] = fmt.Sprintf("All Posts - %s - Admin - %s", this.loggedUser.DisplayName, blogTitle)
-	posts := models.NewPostModel().All("-PostId", true, true)
+
+	post_count, err := models.NewPostModel().Count("", nil, true)
+	if err != nil {
+		panic(err)
+	}
+	paginator := pagination.SetPaginator(this.Ctx, postsPerPage, post_count)
+	posts, _ := models.NewPostModel().Offset("", nil, "-PostId", paginator.Offset(), postsPerPage, true, false, true)
 	this.Data["Posts"] = posts
 
 	views := make(map[int]int)
+	bot_views := make(map[int]int)
 	for _, post := range posts {
 		for _, view := range post.PostViews {
 			if view.ViewedBy == "human" {
 				views[post.PostId] = view.Views
-				break
+			} else if view.ViewedBy == "bot" {
+				bot_views[post.PostId] = view.Views
 			}
 		}
 	}
 	this.Data["Views"] = views
+	this.Data["BotViews"] = bot_views
 }
 
 func (this *AdminController) PostNew() {

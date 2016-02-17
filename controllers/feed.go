@@ -11,7 +11,7 @@ type FeedController struct {
 }
 
 func (this *FeedController) RSS() {
-	posts, err := models.NewPostModel().Offset("-PostId", 0, 10)
+	posts, err := models.NewPostModel().Offset("", nil, "-PostId", 0, 10)
 	if err != nil {
 		panic(err)
 	}

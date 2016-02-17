@@ -8,6 +8,7 @@
         <th>Title</th>
         <th>Status</th>
         <th>Views</th>
+        <th>BotViews</th>
         <th>Created</th>
         <th>Modified</th>
       </tr>
@@ -23,12 +24,14 @@
         <td><a title="Edit" href="/admin/post-edit/{{.PostId}}" class="btn btn-xs btn-success">Posted</a></td>
         {{end}}
         <td>{{index $.Views .PostId}}</td>
+        <td>{{index $.BotViews .PostId}}</td>
         <td>{{.PostTime}}</td>
         <td>{{.PostModifiedTime}}</td>
       </tr>
     {{end}}
     </tbody>
   </table>
+  {{template "paginator.tpl" .}}
 </div>
 {{template "admin-sidebar.tpl" .}}
 {{template "footer.tpl" .}}

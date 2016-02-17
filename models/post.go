@@ -59,125 +59,92 @@ func NewPostModel() *PostModel {
 	return new(PostModel)
 }
 
-func (this *PostModel) Count(filter string, v interface{}) (int64, error) {
-	if filter != "" {
-		return ORM().QueryTable(TABLE_NAME_POST).Filter(filter, v).Filter("PostStatus", 0).Count()
-	} else {
-		return ORM().QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).Count()
+func (this *PostModel) parseArgs(args ...interface{}) orm.Params {
+	params := orm.Params{
+		"ignore_post_status": false,
+		"load_tags":          true,
+		"load_views":         false,
 	}
-}
-
-func (this *PostModel) Offset(orderby string, offset, limit int) ([]*Post, error) {
-	o := ORM()
-	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
-	if err != nil {
-		return posts, err
-	}
-	for _, post := range posts {
-		_, _ = o.LoadRelated(post, "Tags")
-	}
-	return posts, err
-}
-
-func (this *PostModel) All(orderby string, args ...interface{}) []*Post {
-	o := ORM()
-	var posts []*Post
-	var err error
-
-	ignore := false
-	load_views := false
-
 	for i, arg := range args {
 		switch i {
 		case 0:
 			if v, ok := arg.(bool); ok {
-				ignore = v
+				params["ignore_post_status"] = v
 			}
 		case 1:
 			if v, ok := arg.(bool); ok {
-				load_views = v
+				params["load_tags"] = v
+			}
+		case 2:
+			if v, ok := arg.(bool); ok {
+				params["load_views"] = v
 			}
 		}
 	}
-	if ignore == true {
-		if _, err = o.QueryTable(TABLE_NAME_POST).OrderBy(orderby).RelatedSel().All(&posts); err != nil {
-			panic(err)
-		}
-	} else {
-		if _, err = o.QueryTable(TABLE_NAME_POST).Filter("PostStatus", 0).OrderBy(orderby).RelatedSel().All(&posts); err != nil {
-			panic(err)
-		}
+	return params
+}
+
+func (this *PostModel) Count(filter string, v interface{}, args ...interface{}) (int64, error) {
+	params := this.parseArgs(args...)
+	qs := ORM().QueryTable(new(Post))
+	switch {
+	case filter != "":
+		qs = qs.Filter(filter, v)
+	case params["ignore_post_status"] == false:
+		qs = qs.Filter("PostStatus", 0)
+	}
+	return qs.Count()
+}
+
+func (this *PostModel) Offset(filter string, v interface{}, orderby string, offset, limit int, args ...interface{}) ([]*Post, error) {
+	params := this.parseArgs(args...)
+	o := ORM()
+	qs := o.QueryTable(new(Post))
+	switch {
+	case filter != "":
+		qs = qs.Filter(filter, v)
+	case params["ignore_post_status"] == false:
+		qs = qs.Filter("PostStatus", 0)
+	}
+	qs = qs.OrderBy(orderby).Limit(limit, offset).RelatedSel()
+	var posts []*Post
+	_, err := qs.All(&posts)
+	if err != nil {
+		return posts, err
 	}
 	for _, post := range posts {
-		o.LoadRelated(post, "Tags")
-		if load_views {
+		if params["load_tags"] == true {
+			o.LoadRelated(post, "Tags")
+		}
+		if params["load_views"] == true {
 			o.LoadRelated(post, "PostViews")
 		}
 	}
-	return posts
-}
-
-func (this *PostModel) ById(id int, ignorePostStatus ...bool) (*Post, error) {
-	o := ORM()
-	post := &Post{PostId: id}
-	var err error
-	ignore := false
-	if len(ignorePostStatus) > 0 {
-		ignore = ignorePostStatus[0]
-	}
-	if ignore == true {
-		if err = o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).RelatedSel().One(post); err != nil {
-			return post, err
-		}
-	} else {
-		if err = o.QueryTable(TABLE_NAME_POST).Filter("PostId", id).Filter("PostStatus", 0).RelatedSel().One(post); err != nil {
-			return post, err
-		}
-	}
-	if _, err = o.LoadRelated(post, "Tags"); err != nil {
-		return post, err
-	}
-	return post, err
-}
-
-func (this *PostModel) BySlug(post_slug string) (*Post, error) {
-	o := ORM()
-	post := &Post{PostSlug: post_slug}
-	err := o.QueryTable(TABLE_NAME_POST).Filter("PostSlug", post_slug).Filter("PostStatus", 0).RelatedSel().One(post)
-	if err != nil {
-		return post, err
-	}
-	if _, err = o.LoadRelated(post, "Tags"); err != nil {
-		return post, err
-	}
-	return post, err
-}
-
-func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit int) ([]*Post, error) {
-	o := ORM()
-	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Author__AuthorId", author_id).Filter("PostStatus", 0).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
-	if err != nil {
-		return posts, err
-	}
-	for _, post := range posts {
-		_, err = o.LoadRelated(post, "Tags")
-	}
 	return posts, err
 }
 
-func (this *PostModel) ByTagName(tag_name, orderby string, offset, limit int) ([]*Post, error) {
-	o := ORM()
-	var posts []*Post
-	_, err := o.QueryTable(TABLE_NAME_POST).Filter("Tags__Tag__TagName", tag_name).Filter("PostStatus", 0).OrderBy(orderby).Limit(limit, offset).RelatedSel().All(&posts)
-	if err != nil {
-		return posts, err
+func (this *PostModel) ById(id int, args ...interface{}) (*Post, error) {
+	posts, err := this.Offset("PostId", id, "-PostId", 0, -1, args...)
+	if err != nil || len(posts) != 1 {
+		return nil, err
 	}
-	for _, post := range posts {
-		o.LoadRelated(post, "Tags")
+	return posts[0], err
+}
+
+func (this *PostModel) BySlug(post_slug string, args ...interface{}) (*Post, error) {
+	posts, err := this.Offset("PostSlug", post_slug, "-PostId", 0, -1, args...)
+	if err != nil || len(posts) != 1 {
+		return nil, err
 	}
-	return posts, err
+	return posts[0], err
+}
+
+func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit int, args ...interface{}) ([]*Post, error) {
+	return this.Offset("Author__AuthorId", author_id, orderby, offset, limit, args...)
+}
+
+func (this *PostModel) ByTagName(tag_name, orderby string, offset, limit int, args ...interface{}) ([]*Post, error) {
+	return this.Offset("Tags__Tag__TagName", tag_name, orderby, offset, limit, args...)
 }
 
 func (this *PostModel) PostNew(post *Post) (int64, error) {

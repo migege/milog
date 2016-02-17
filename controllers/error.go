@@ -18,7 +18,7 @@ func (this *ErrorController) Error404() {
 	}
 	paginator := pagination.SetPaginator(this.Ctx, postsPerPage, post_count)
 
-	posts, err := models.NewPostModel().Offset("-PostId", paginator.Offset(), postsPerPage)
+	posts, err := models.NewPostModel().Offset("", nil, "-PostId", paginator.Offset(), postsPerPage)
 	if err != nil {
 		panic(err)
 	}

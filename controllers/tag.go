@@ -23,7 +23,7 @@ func (this *TagController) ByName() {
 
 	posts, err := models.NewPostModel().ByTagName(tag_name, "-PostId", paginator.Offset(), postsPerPage, false, true, true)
 	if err != nil {
-		panic(err)
+		this.Abort("404")
 	}
 	this.Data["Posts"] = posts
 

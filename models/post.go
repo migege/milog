@@ -99,6 +99,7 @@ func (this *PostModel) Count(filter string, v interface{}, args ...interface{}) 
 
 func (this *PostModel) Offset(filter string, v interface{}, orderby string, offset, limit int, args ...interface{}) ([]*Post, error) {
 	params := this.parseArgs(args...)
+
 	o := ORM()
 	qs := o.QueryTable(new(Post))
 	if filter != "" {
@@ -107,12 +108,14 @@ func (this *PostModel) Offset(filter string, v interface{}, orderby string, offs
 	if params["ignore_post_status"] == false {
 		qs = qs.Filter("PostStatus", 0)
 	}
+
 	qs = qs.OrderBy(orderby).Limit(limit, offset).RelatedSel()
 	var posts []*Post
 	_, err := qs.All(&posts)
 	if err != nil {
 		return posts, err
 	}
+
 	for _, post := range posts {
 		if params["load_tags"] == true {
 			o.LoadRelated(post, "Tags")
@@ -151,7 +154,11 @@ func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit i
 }
 
 func (this *PostModel) ByTagName(tag_name, orderby string, offset, limit int, args ...interface{}) ([]*Post, error) {
-	return this.Offset("Tags__Tag__TagSlug", tag_name, orderby, offset, limit, args...)
+	posts, err := this.Offset("Tags__Tag__TagSlug", tag_name, orderby, offset, limit, args...)
+	if len(posts) < 1 {
+		return nil, errors.New("no results")
+	}
+	return posts, err
 }
 
 func (this *PostModel) PostNew(post *Post) (int64, error) {

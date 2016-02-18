@@ -55,7 +55,7 @@
           {{if .LoggedUser}}
           <li><a href="/admin" title="Already logged">{{.LoggedUser.DisplayName}}</a></li>
           {{else}}
-          <li><a href="/signup" title="Sign up">Sign up</a></li>
+          <!--li><a href="/signup" title="Sign up">Sign up</a></li-->
           <li><a href="/login" title="Log In">Log In</a></li>
           {{end}}
         </ul>

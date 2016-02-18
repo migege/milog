@@ -1,8 +1,6 @@
 package models
 
-import (
-	_ "fmt"
-)
+import "strings"
 
 const (
 	TABLE_NAME_TAG              = "t_tags"
@@ -22,6 +20,10 @@ func NewTag() *Tag {
 
 func (this *Tag) TableName() string {
 	return TABLE_NAME_TAG
+}
+
+func (this *Tag) formatSlug() {
+	this.TagSlug = strings.Replace(strings.ToLower(this.TagName), " ", "-", -1)
 }
 
 type TagRelationship struct {
@@ -50,7 +52,8 @@ func NewTagModel() *TagModel {
 func (this *TagModel) AddTags(tags []*Tag) {
 	o := ORM()
 	for _, tag := range tags {
-		_, _, _ = o.ReadOrCreate(tag, "TagSlug")
+		tag.formatSlug()
+		o.ReadOrCreate(tag, "TagSlug")
 	}
 }
 

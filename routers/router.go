@@ -29,7 +29,7 @@ func init() {
 	beego.Router("/signup", &controllers.AuthorController{}, "get:Signup")
 
 	// tags
-	beego.Router("/tag/:tag([\\w]+)", &controllers.TagController{}, "get:ByName")
+	beego.Router("/tag/:tag([\\w\\-]+)", &controllers.TagController{}, "get:ByName")
 
 	// posts
 	beego.Router("/post/:id([0-9]+)", &controllers.PostController{}, "get:ById")

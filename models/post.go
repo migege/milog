@@ -151,7 +151,7 @@ func (this *PostModel) ByAuthorId(author_id int, orderby string, offset, limit i
 }
 
 func (this *PostModel) ByTagName(tag_name, orderby string, offset, limit int, args ...interface{}) ([]*Post, error) {
-	return this.Offset("Tags__Tag__TagName", tag_name, orderby, offset, limit, args...)
+	return this.Offset("Tags__Tag__TagSlug", tag_name, orderby, offset, limit, args...)
 }
 
 func (this *PostModel) PostNew(post *Post) (int64, error) {

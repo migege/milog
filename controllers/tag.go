@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/astaxie/beego/utils/pagination"
 	"github.com/migege/milog/models"
 )
@@ -24,4 +26,8 @@ func (this *TagController) ByName() {
 		panic(err)
 	}
 	this.Data["Posts"] = posts
+
+	if tag, err := models.NewTagModel().BySlug(tag_name); err == nil {
+		this.Data["Content"] = fmt.Sprintf("Tag - %s", tag.TagName)
+	}
 }

@@ -49,6 +49,13 @@ func NewTagModel() *TagModel {
 	return &TagModel{}
 }
 
+func (this *TagModel) BySlug(tag_slug string) (*Tag, error) {
+	o := ORM()
+	tag := NewTag()
+	err := o.QueryTable(NewTag()).Filter("TagSlug", tag_slug).One(tag)
+	return tag, err
+}
+
 func (this *TagModel) AddTags(tags []*Tag) {
 	o := ORM()
 	for _, tag := range tags {

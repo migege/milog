@@ -31,6 +31,6 @@ func (this *PostModel) ViewedBy(post_id int, viewed_by string) error {
 func (this *PostModel) MostPopular(top int) ([]*PostViews, error) {
 	o := ORM()
 	var views []*PostViews
-	_, err := o.QueryTable(new(PostViews)).Filter("ViewedBy", "human").OrderBy("-Views").Limit(top, 0).RelatedSel().All(&views)
+	_, err := o.QueryTable(new(PostViews)).Filter("ViewedBy", "human").OrderBy("-Views").Limit(top, 0).RelatedSel().Filter("Post__PostStatus", 0).All(&views)
 	return views, err
 }

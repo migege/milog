@@ -88,10 +88,10 @@ func (this *PostModel) parseArgs(args ...interface{}) orm.Params {
 func (this *PostModel) Count(filter string, v interface{}, args ...interface{}) (int64, error) {
 	params := this.parseArgs(args...)
 	qs := ORM().QueryTable(new(Post))
-	switch {
-	case filter != "":
+	if filter != "" {
 		qs = qs.Filter(filter, v)
-	case params["ignore_post_status"] == false:
+	}
+	if params["ignore_post_status"] == false {
 		qs = qs.Filter("PostStatus", 0)
 	}
 	return qs.Count()
@@ -101,10 +101,10 @@ func (this *PostModel) Offset(filter string, v interface{}, orderby string, offs
 	params := this.parseArgs(args...)
 	o := ORM()
 	qs := o.QueryTable(new(Post))
-	switch {
-	case filter != "":
+	if filter != "" {
 		qs = qs.Filter(filter, v)
-	case params["ignore_post_status"] == false:
+	}
+	if params["ignore_post_status"] == false {
 		qs = qs.Filter("PostStatus", 0)
 	}
 	qs = qs.OrderBy(orderby).Limit(limit, offset).RelatedSel()

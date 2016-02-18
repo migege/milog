@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -125,16 +126,22 @@ func (this *PostModel) Offset(filter string, v interface{}, orderby string, offs
 
 func (this *PostModel) ById(id int, args ...interface{}) (*Post, error) {
 	posts, err := this.Offset("PostId", id, "-PostId", 0, -1, args...)
-	if err != nil || len(posts) != 1 {
+	if err != nil {
 		return nil, err
+	}
+	if len(posts) != 1 {
+		return nil, errors.New("only 1 result is right")
 	}
 	return posts[0], err
 }
 
 func (this *PostModel) BySlug(post_slug string, args ...interface{}) (*Post, error) {
 	posts, err := this.Offset("PostSlug", post_slug, "-PostId", 0, -1, args...)
-	if err != nil || len(posts) != 1 {
+	if err != nil {
 		return nil, err
+	}
+	if len(posts) != 1 {
+		return nil, errors.New("only 1 result is right")
 	}
 	return posts[0], err
 }

@@ -8,7 +8,7 @@
     </div>
     <div class="post-footer">
       <span class="label label-default"><a href="/author/{{.Author.AuthorName}}">{{.Author.DisplayName}}</a> posted @ {{.PostTime}}</span>
-      <span class="label label-success">{{index $.Views .PostId}}&nbsp;views&nbsp;&amp;&nbsp;<a href="/post/{{.PostSlug}}#comments">{{.CommentCount}}&nbsp;{{if eq .CommentCount 1}}comment{{else}}comments{{end}}</a></span>
+      <span class="label label-success">{{if $.Views}}{{index $.Views .PostId}}&nbsp;views&nbsp;&amp;&nbsp;{{end}}<a href="/post/{{.PostSlug}}#comments">{{.CommentCount}}&nbsp;{{if eq .CommentCount 1}}comment{{else}}comments{{end}}</a></span>
       {{range .Tags}}
       <span class="label label-info"><a href="/tag/{{.TagSlug}}">{{.TagName}}</a></span>
       {{end}}

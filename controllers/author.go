@@ -31,10 +31,22 @@ func (this *AuthorController) ByName() {
 		paginator := pagination.SetPaginator(this.Ctx, postsPerPage, post_count)
 		if author, err := models.NewAuthorModel().ByName(author_name); err == nil {
 			this.Data["Author"] = author
-			posts, err := models.NewPostModel().ByAuthorId(author.AuthorId, "-PostId", paginator.Offset(), postsPerPage)
+			posts, err := models.NewPostModel().ByAuthorId(author.AuthorId, "-PostId", paginator.Offset(), postsPerPage, false, true, true)
 			if err != nil {
 				panic(err)
 			}
+
+			views := make(map[int]int)
+			for _, post := range posts {
+				for _, view := range post.PostViews {
+					if view.ViewedBy == "human" {
+						views[post.PostId] = view.Views
+						break
+					}
+				}
+			}
+			this.Data["Views"] = views
+
 			this.Data["Posts"] = posts
 			this.Data["PageTitle"] = fmt.Sprintf("%s - Author - %s", author.DisplayName, blogTitle)
 		} else {

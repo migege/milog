@@ -37,12 +37,12 @@ func (this *MainController) Get() {
 		this.Data["LatestComments"] = latest_comments
 	}
 
-	if links, err := models.NewLinkModel().AllLinks(); err == nil {
-		this.Data["Links"] = links
-	}
-
 	if posts, err := models.NewPostModel().MostPopular(10); err == nil {
 		this.Data["MostPopular"] = posts
+	}
+
+	if links, err := models.NewLinkModel().AllLinks(); err == nil {
+		this.Data["Links"] = links
 	}
 
 	this.Data["PageTitle"] = blogTitle

@@ -18,6 +18,14 @@ func (this *PostController) setPost(post *models.Post) {
 	this.Data["Post"] = post
 	this.Data["PageTitle"] = fmt.Sprintf("%s - %s", post.PostTitle, blogTitle)
 
+	if latest_comments, err := models.NewCommentModel().Latest(10); err == nil {
+		this.Data["LatestComments"] = latest_comments
+	}
+
+	if posts, err := models.NewPostModel().MostPopular(10); err == nil {
+		this.Data["MostPopular"] = posts
+	}
+
 	// comments
 	comments := models.NewCommentModel().ByPostId(post.PostId, "-CommentId")
 	this.Data["Comments"] = comments

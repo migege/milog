@@ -48,5 +48,6 @@ func (this *TagController) ByName() {
 
 	if tag, err := models.NewTagModel().BySlug(tag_name); err == nil {
 		this.Data["Content"] = fmt.Sprintf("Tag - %s", tag.TagName)
+		this.Data["PageTitle"] = fmt.Sprintf("%s - Tag - %s", tag.TagName, blogTitle)
 	}
 }

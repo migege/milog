@@ -8,6 +8,20 @@
         <img class="img-responsive" src="http://pic.yupoo.com/evitc_v/FkJhiBTL/GcNUy.jpg" alt="brokendreamscoffee" />
       </div>
     </li>
+    {{if .MostPopular}}
+    <li class="widget panel panel-default">
+      <div class="widget-header panel-heading">
+        <span class="text-uppercase">most popular</span>
+      </div>
+      <div class="widget-body panel-body">
+        <ul class="list-unstyled">
+        {{range .MostPopular}}
+          <li><span class="label label-warning">{{.Views}}</span>&nbsp;<a href="/post/{{.Post.PostSlug}}" title="{{.Post.PostTitle}}">{{.Post.PostTitle}}</a></li>
+        {{end}}
+        </ul>
+      </div>
+    </li>
+    {{end}}
     {{if .LatestComments}}
     <li class="widget panel panel-default">
       <div class="widget-header panel-heading">

@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	_ "fmt"
-
 	"github.com/astaxie/beego/utils/pagination"
 	"github.com/migege/milog/models"
 )

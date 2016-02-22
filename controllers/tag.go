@@ -38,13 +38,7 @@ func (this *TagController) ByName() {
 	}
 	this.Data["Views"] = views
 
-	if latest_comments, err := models.NewCommentModel().Latest(10); err == nil {
-		this.Data["LatestComments"] = latest_comments
-	}
-
-	if posts, err := models.NewPostModel().MostPopular(10); err == nil {
-		this.Data["MostPopular"] = posts
-	}
+	this.LoadSidebar([]string{"LatestComments", "MostPopular"})
 
 	if tag, err := models.NewTagModel().BySlug(tag_name); err == nil {
 		this.Data["Content"] = fmt.Sprintf("Tag - %s", tag.TagName)

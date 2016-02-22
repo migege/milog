@@ -33,17 +33,7 @@ func (this *MainController) Get() {
 	}
 	this.Data["Views"] = views
 
-	if latest_comments, err := models.NewCommentModel().Latest(10); err == nil {
-		this.Data["LatestComments"] = latest_comments
-	}
-
-	if posts, err := models.NewPostModel().MostPopular(10); err == nil {
-		this.Data["MostPopular"] = posts
-	}
-
-	if links, err := models.NewLinkModel().AllLinks(); err == nil {
-		this.Data["Links"] = links
-	}
+	this.LoadSidebar([]string{"LatestComments", "MostPopular", "Links", "Hehe"})
 
 	this.Data["PageTitle"] = blogTitle
 	this.TplName = "home.tpl"

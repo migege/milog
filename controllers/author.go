@@ -47,13 +47,7 @@ func (this *AuthorController) ByName() {
 			}
 			this.Data["Views"] = views
 
-			if latest_comments, err := models.NewCommentModel().Latest(10); err == nil {
-				this.Data["LatestComments"] = latest_comments
-			}
-
-			if posts, err := models.NewPostModel().MostPopular(10); err == nil {
-				this.Data["MostPopular"] = posts
-			}
+			this.LoadSidebar([]string{"LatestComments", "MostPopular"})
 
 			this.Data["Posts"] = posts
 			this.Data["PageTitle"] = fmt.Sprintf("%s - Author - %s", author.DisplayName, blogTitle)

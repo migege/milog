@@ -79,3 +79,22 @@ func (this *BaseController) CheckLogged() {
 		this.StopRun()
 	}
 }
+
+func (this *BaseController) LoadSidebar(widgets []string) {
+	for _, widget := range widgets {
+		if widget == "LatestComments" {
+			if latest_comments, err := models.NewCommentModel().Latest(10); err == nil {
+				this.Data["LatestComments"] = latest_comments
+			}
+		} else if widget == "MostPopular" {
+			if posts, err := models.NewPostModel().MostPopular(10); err == nil {
+				this.Data["MostPopular"] = posts
+			}
+		} else if widget == "Links" {
+			if links, err := models.NewLinkModel().AllLinks(); err == nil {
+				this.Data["Links"] = links
+			}
+		} else {
+		}
+	}
+}

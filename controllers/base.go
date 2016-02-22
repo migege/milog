@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -63,6 +64,8 @@ func (this *BaseController) Prepare() {
 			this.loggedUser = logged_user
 		}
 	}
+
+	this.Data["GoVersion"] = runtime.Version()
 }
 
 func (this *BaseController) Render() error {

@@ -17,6 +17,7 @@ func (this *SearchController) doSearch(term string) {
 
 	if posts, err := models.NewSearchModel().Search(term); err == nil {
 		this.Data["Posts"] = posts
+		this.SetPostViews(posts)
 	}
 
 	this.LoadSidebar([]string{"LatestComments", "MostPopular"})

@@ -36,17 +36,7 @@ func (this *AuthorController) ByName() {
 				panic(err)
 			}
 
-			views := make(map[int]int)
-			for _, post := range posts {
-				for _, view := range post.PostViews {
-					if view.ViewedBy == "human" {
-						views[post.PostId] = view.Views
-						break
-					}
-				}
-			}
-			this.Data["Views"] = views
-
+			this.SetPostViews(posts)
 			this.LoadSidebar([]string{"LatestComments", "MostPopular"})
 
 			this.Data["Posts"] = posts

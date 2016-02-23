@@ -27,17 +27,7 @@ func (this *TagController) ByName() {
 	}
 	this.Data["Posts"] = posts
 
-	views := make(map[int]int)
-	for _, post := range posts {
-		for _, view := range post.PostViews {
-			if view.ViewedBy == "human" {
-				views[post.PostId] = view.Views
-				break
-			}
-		}
-	}
-	this.Data["Views"] = views
-
+	this.SetPostViews(posts)
 	this.LoadSidebar([]string{"LatestComments", "MostPopular"})
 
 	if tag, err := models.NewTagModel().BySlug(tag_name); err == nil {

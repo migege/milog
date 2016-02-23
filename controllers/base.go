@@ -80,6 +80,19 @@ func (this *BaseController) CheckLogged() {
 	}
 }
 
+func (this *BaseController) SetPostViews(posts []*models.Post) {
+	views := make(map[int]int)
+	for _, post := range posts {
+		for _, view := range post.PostViews {
+			if view.ViewedBy == "human" {
+				views[post.PostId] = view.Views
+				break
+			}
+		}
+	}
+	this.Data["Views"] = views
+}
+
 func (this *BaseController) LoadSidebar(widgets []string) {
 	for _, widget := range widgets {
 		if widget == "LatestComments" {

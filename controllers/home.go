@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/astaxie/beego/utils/pagination"
 	"github.com/migege/milog/models"
 )
@@ -35,6 +37,6 @@ func (this *MainController) Get() {
 
 	this.LoadSidebar([]string{"LatestComments", "MostPopular", "Links", "Hehe"})
 
-	this.Data["PageTitle"] = blogTitle
+	this.Data["PageTitle"] = fmt.Sprintf("%s %s", blogTitle, blogDesc)
 	this.TplName = "home.tpl"
 }

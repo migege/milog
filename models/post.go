@@ -130,8 +130,8 @@ func (this *PostModel) Offset(filter string, v interface{}, orderby string, offs
 	return posts, err
 }
 
-func (this *PostModel) IdIn(id []int) ([]*Post, error) {
-	return this.Offset("PostId__in", id, "", 0, -1, false, true, true)
+func (this *PostModel) IdIn(id []int, args ...interface{}) ([]*Post, error) {
+	return this.Offset("PostId__in", id, "", 0, -1, args...)
 }
 
 func (this *PostModel) ById(id int, args ...interface{}) (*Post, error) {

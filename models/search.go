@@ -65,7 +65,7 @@ func (this *SearchModel) Search(term string) ([]*Post, error) {
 		return nil, errors.New("no search results.")
 	}
 
-	posts, err := NewPostModel().IdIn(post_id)
+	posts, err := NewPostModel().IdIn(post_id, false, true, true)
 	if err == nil {
 		var weighted WeightedPosts
 		for _, post := range posts {

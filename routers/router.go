@@ -31,6 +31,9 @@ func init() {
 	// tags
 	beego.Router("/tag/:tag([\\w\\-]+)", &controllers.TagController{}, "get:ByName")
 
+	// search
+	beego.Router("/search/:term", &controllers.SearchController{}, "get:Search")
+
 	// posts
 	beego.Router("/post/:id([0-9]+)", &controllers.PostController{}, "get:ById")
 	beego.Router("/post/:slug", &controllers.PostController{}, "get:BySlug")

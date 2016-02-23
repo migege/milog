@@ -2,6 +2,28 @@
   <ul class="list-unstyled">
     <li class="widget panel panel-default">
       <div class="widget-header panel-heading">
+        <span class="text-uppercase">search</span>
+      </div>
+      <div class="widget-body panel-body">
+        <form class="form-inline" id="searchform">
+          <div class="form-group">
+            <input type="text" class="form-control" id="searchterm" placeholder="Type here..." />
+          </div>
+          <button class="btn btn-default" type="submit">Go</button>
+        </form>
+        <script type="text/javascript">
+        function gosearch(){
+          location.href="/search/"+$('#searchterm').val().replace(/ /g,'+')
+        }
+        $('#searchform').submit(function(){
+          gosearch()
+          return false
+        })
+        </script>
+      </div>
+    </li>
+    <li class="widget panel panel-default">
+      <div class="widget-header panel-heading">
         <span class="text-uppercase">扫描关注微信</span>
       </div>
       <div class="widget-body panel-body">

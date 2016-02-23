@@ -108,8 +108,11 @@ func (this *PostModel) Offset(filter string, v interface{}, orderby string, offs
 	if params["ignore_post_status"] == false {
 		qs = qs.Filter("PostStatus", 0)
 	}
+	if orderby != "" {
+		qs = qs.OrderBy(orderby)
+	}
 
-	qs = qs.OrderBy(orderby).Limit(limit, offset).RelatedSel()
+	qs = qs.Limit(limit, offset).RelatedSel()
 	var posts []*Post
 	_, err := qs.All(&posts)
 	if err != nil {
@@ -128,7 +131,7 @@ func (this *PostModel) Offset(filter string, v interface{}, orderby string, offs
 }
 
 func (this *PostModel) IdIn(id []int) ([]*Post, error) {
-	return this.Offset("PostId__in", id, "-PostId", 0, -1, false, true, true)
+	return this.Offset("PostId__in", id, "", 0, -1, false, true, true)
 }
 
 func (this *PostModel) ById(id int, args ...interface{}) (*Post, error) {

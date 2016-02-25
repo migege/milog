@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"net/url"
 	"runtime"
 	"strconv"
 	"time"
@@ -47,6 +48,10 @@ func (this *BaseController) Prepare() {
 	this.Data["BlogTitle"] = blogTitle
 	this.Data["BlogDesc"] = blogDesc
 	this.Data["BlogUrl"] = blogUrl
+
+	if u, err := url.Parse(blogUrl); err == nil {
+		this.Data["BlogHost"] = u.Host
+	}
 
 	logged_username := this.GetSession(SESS_NAME)
 	if logged_username == nil {

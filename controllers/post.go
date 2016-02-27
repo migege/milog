@@ -18,7 +18,7 @@ func (this *PostController) setPost(post *models.Post) {
 	this.Data["Post"] = post
 	this.Data["PageTitle"] = fmt.Sprintf("%s - %s", post.PostTitle, blogTitle)
 
-	this.LoadSidebar([]string{"LatestComments", "MostPopular"})
+	this.LoadSidebar([]string{"LatestComments", "MostPopular", "TagCloud"})
 
 	// comments
 	comments := models.NewCommentModel().ByPostId(post.PostId, "-CommentId")

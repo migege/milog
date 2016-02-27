@@ -1,6 +1,9 @@
 package models
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 const (
 	TABLE_NAME_TAG              = "t_tags"
@@ -59,6 +62,9 @@ func (this *TagModel) BySlug(tag_slug string) (*Tag, error) {
 func (this *TagModel) AddTags(tags []*Tag) {
 	o := ORM()
 	for _, tag := range tags {
+		if tag == nil {
+			continue
+		}
 		tag.formatSlug()
 		o.ReadOrCreate(tag, "TagSlug")
 	}
@@ -69,4 +75,17 @@ func (this *TagModel) AllTags() ([]*Tag, error) {
 	var tags []*Tag
 	_, err := o.QueryTable(TABLE_NAME_TAG).All(&tags)
 	return tags, err
+}
+
+type TagCount struct {
+	TagName string
+	TagSlug string
+	Counts  int
+}
+
+func (this *TagModel) MostPopular(limit int) ([]TagCount, error) {
+	o := ORM()
+	var counts []TagCount
+	_, err := o.Raw(fmt.Sprintf("select tag_slug,tag_name,counts from ( select t1.tag_id,t2.tag_slug,t2.tag_name,count(distinct t1.post_id) counts from t_tag_relationships t1 join t_tags t2 on t1.tag_id=t2.tag_id join t_posts t3 on t1.post_id=t3.post_id where t3.post_status=0 group by tag_id order by counts desc limit %d) t where 1=1 order by tag_name", limit)).QueryRows(&counts)
+	return counts, err
 }

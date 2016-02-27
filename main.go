@@ -7,9 +7,10 @@ import (
 )
 
 func init() {
+	beego.ErrorController(&controllers.ErrorController{})
+	beego.AddFuncMap("add", Add)
 }
 
 func main() {
-	beego.ErrorController(&controllers.ErrorController{})
 	beego.Run()
 }

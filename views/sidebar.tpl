@@ -58,6 +58,18 @@
       </div>
     </li>
     {{end}}
+    {{if .TagCloud}}
+    <li class="widget panel panel-default">
+      <div class="widget-header panel-heading">
+        <span class="text-uppercase">tag cloud</span>
+      </div>
+      <div class="widget-body panel-body">
+        {{range .TagCloud}}
+        <a href="/tag/{{.TagSlug}}" title="{{.Counts}} posts" style="font-size:{{add .Counts 9}}px">{{.TagName}}</a>
+        {{end}}
+      </div>
+    </li>
+    {{end}}
     <li class="widget panel panel-default">
       <div class="widget-header panel-heading">
         <span class="text-uppercase">feed</span>

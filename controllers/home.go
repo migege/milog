@@ -25,7 +25,7 @@ func (this *MainController) Get() {
 	this.Data["Posts"] = posts
 
 	this.SetPostViews(posts)
-	this.LoadSidebar([]string{"LatestComments", "MostPopular", "Links", "Hehe"})
+	this.LoadSidebar([]string{"LatestComments", "MostPopular", "Links", "TagCloud"})
 
 	this.Data["PageTitle"] = fmt.Sprintf("%s %s", blogTitle, blogDesc)
 	this.TplName = "home.tpl"

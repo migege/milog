@@ -112,7 +112,10 @@ func (this *BaseController) LoadSidebar(widgets []string) {
 			if links, err := models.NewLinkModel().AllLinks(); err == nil {
 				this.Data["Links"] = links
 			}
-		} else {
+		} else if widget == "TagCloud" {
+			if tags, err := models.NewTagModel().MostPopular(20); err == nil {
+				this.Data["TagCloud"] = tags
+			}
 		}
 	}
 }

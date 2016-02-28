@@ -1,6 +1,3 @@
 conf/db.conf
 conf/cache.conf
 milog
-start
-stop
-nohup.out

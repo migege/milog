@@ -1,20 +1,23 @@
+h1,h2,h3,h4,h5,h6{
+  font-weight:normal;
+  font-family:"calluna-sans","Lucida Sans",sans-serif;
+}
+body{
+  font-family:"source-serif-pro","STSong","SimSum","Times New Roman",Times,serif;
+}
 li.widget{
   margin-bottom:20px;
 }
-
 .widget-header{
   font-weight:bold;
 }
-
 .post{
   padding-bottom:20px;
   border-bottom:1px solid #ccc;
 }
-
 .post-body{
   font-size:1.6em
 }
-
 .label a{
   color:#fff;
 }

@@ -9,7 +9,7 @@
           <div class="form-group">
             <input type="text" class="form-control" id="searchterm" placeholder="Type here..." />
           </div>
-          <button class="btn btn-success" type="submit">Go</button>
+          <button class="btn btn-primary" type="submit">Go</button>
         </form>
         <script type="text/javascript">
         function gosearch(){

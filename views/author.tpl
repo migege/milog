@@ -11,7 +11,6 @@
       <p class="form-control-static"><a href="{{.Author.AuthorUrl}}" rel="nofollow">{{.Author.AuthorUrl}}</a></p>
     </div>
   </form>
-  <h3>Posts</h3>
   <div class="posts">
   {{template "posts.tpl" .}}
   </div>

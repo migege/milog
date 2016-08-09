@@ -8,10 +8,10 @@
     </div>
     <div class="post-footer">
       <span class="label label-default"><a href="/author/{{.Author.AuthorName}}">{{.Author.DisplayName}}</a> posted @ {{.PostTime}}</span>
-      {{if $.Views}}<span class="label label-warning">{{index $.Views .PostId}}&nbsp;views</span>{{end}}
-      <a href="/post/{{.PostSlug}}#comments" class="label label-success">{{.CommentCount}}&nbsp;{{if eq .CommentCount 1}}comment{{else}}comments{{end}}</a>
+      {{if $.Views}}<span class="label label-default">{{index $.Views .PostId}}&nbsp;views</span>{{end}}
+      <a href="/post/{{.PostSlug}}#comments" class="label label-default">{{.CommentCount}}&nbsp;{{if eq .CommentCount 1}}comment{{else}}comments{{end}}</a>
       {{range .Tags}}
-      <a href="/tag/{{.TagSlug}}" class="label label-info">{{.TagName}}</a>
+      <a href="/tag/{{.TagSlug}}" class="label label-default">{{.TagName}}</a>
       {{end}}
     </div>
   </div>

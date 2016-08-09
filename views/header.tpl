@@ -12,8 +12,6 @@
 <body>
 <div class="container-fluid">
   <div class="row text-center col-xs-18 col-md-12" id="navtop">
-    <h1>
-      <a href="{{.BlogUrl}}" title="{{.BlogTitle}}">{{.BlogTitle}}</a>&nbsp;<small>{{.BlogDesc}}</small>
-    </h1>
+    <h1><a href="{{.BlogUrl}}" title="{{.BlogTitle}}">{{.BlogTitle}}</a>&nbsp;<small>{{.BlogDesc}}</small></h1>
   </div>
   <div class="row" id="container">

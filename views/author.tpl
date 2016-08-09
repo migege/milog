@@ -1,6 +1,6 @@
 {{template "header.tpl" .}}
 <div class="col-xs-12 col-md-9">
-  <h2>{{.Author.DisplayName}}</h2>
+  <h1>{{.Author.DisplayName}}</h1>
   <form>
     <div class="form-group">
       <label class="control-label">Mail</label>

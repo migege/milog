@@ -2,7 +2,7 @@
 <div class="col-xs-12 col-md-9">
   <div class="post" id="post_{{.Post.PostId}}">
     <div class="post-header">
-      <h2>{{.Post.PostTitle}}</h2>
+      <h1>{{.Post.PostTitle}}</h1>
     </div>
     <div class="post-body">
       {{str2html .Post.PostContent}}

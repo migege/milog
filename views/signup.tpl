@@ -16,7 +16,7 @@
         <input type="password" name="pwd" id="user_pass" class="form-control" value="" size="20" placeholder="Password" />
       </div>
       <p class="submit">
-        <button type="submit" id="loginsubmit" class="btn btn-primary">Log In</button>
+        <button type="submit" id="loginsubmit" class="btn btn-success">Log In</button>
         <input type="hidden" name="ts" id="logints" value="{{.TimeStamp}}" />
         <input type="hidden" name="redirect" id="loginredirect" value="{{.Refer}}" />
       </p>

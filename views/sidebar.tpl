@@ -22,14 +22,6 @@
         </script>
       </div>
     </li>
-    <li class="widget panel panel-default">
-      <div class="widget-header panel-heading">
-        <span class="text-uppercase">扫描关注微信</span>
-      </div>
-      <div class="widget-body panel-body">
-        <img class="img-responsive" src="http://pic.yupoo.com/evitc_v/FkJhiBTL/GcNUy.jpg" alt="brokendreamscoffee" />
-      </div>
-    </li>
     {{if .MostPopular}}
     <li class="widget panel panel-default">
       <div class="widget-header panel-heading">
@@ -38,7 +30,7 @@
       <div class="widget-body panel-body">
         <ul class="list-unstyled">
         {{range .MostPopular}}
-          <li><span class="label label-warning">{{.Views}}</span>&nbsp;<a href="/post/{{.Post.PostSlug}}" title="{{.Post.PostTitle}}">{{.Post.PostTitle}}</a></li>
+          <li><span class="label label-default">{{.Views}}</span>&nbsp;<a href="/post/{{.Post.PostSlug}}" title="{{.Post.PostTitle}}">{{.Post.PostTitle}}</a></li>
         {{end}}
         </ul>
       </div>

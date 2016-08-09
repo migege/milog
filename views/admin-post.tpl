@@ -32,7 +32,7 @@
         </label>
       </div>
       <p class="submit">
-        <button type="submit" class="btn btn-primary">Post</button>
+        <button type="submit" class="btn btn-success">Post</button>
         <input type="hidden" id="post-id" name="post-id" value="{{.Post.PostId}}" />
         <input type="hidden" id="post-content" name="post-content" value="" />
         {{if .Post.PostId}}

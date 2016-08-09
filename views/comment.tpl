@@ -45,7 +45,7 @@
         <p><input class="form-control" type="text" name="captcha" placeholder="Enter 6 digits above" /></p>
       </div>
       <p class="form-submit" style="display:block">
-        <button type="submit" id="comment-submit" class="btn btn-primary">Post Comment</button>
+        <button type="submit" id="comment-submit" class="btn btn-success">Post Comment</button>
         <input type="hidden" name="post_id" id="post_id" value="{{.Post.PostId}}" />
         <input type="hidden" name="comment_parent_id" id="comment_parent_id" value="0" />
       </p>

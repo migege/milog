@@ -11,7 +11,9 @@
 </head>
 <body>
 <div class="container-fluid">
-  <div class="row text-center col-xs-18 col-md-12" id="navtop">
-    <h1><a href="{{.BlogUrl}}" title="{{.BlogTitle}}">{{.BlogTitle}}</a>&nbsp;<small>{{.BlogDesc}}</small></h1>
+  <div class="row" id="navtop">
+    <div class="col-xs-18 col-md-12">
+      <h1><a href="{{.BlogUrl}}" title="{{.BlogTitle}}">{{.BlogTitle}}</a>&nbsp;<small>{{.BlogDesc}}</small></h1>
+    </div>
   </div>
   <div class="row" id="container">

@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/utils/captcha"
 	"github.com/migege/milog/models"
+	"github.com/migege/milog/plugins"
 )
 
 var (
@@ -24,12 +25,18 @@ type CommentController struct {
 
 func (this *CommentController) DoAddComment() {
 	if cpt.VerifyReq(this.Ctx.Request) != true {
-		panic(errors.New("error: wrong captcha"))
+		panic(errors.New("error: human test"))
 	}
+
 	content := this.GetString("comment")
 	if content == "" {
 		panic(errors.New("error: empty comment"))
 	}
+
+	if err := plugins.Hooks.Callback("PreComment", content); err != nil {
+		panic(err)
+	}
+
 	post_id := this.Input().Get("post_id")
 	int_post_id, _ := strconv.Atoi(post_id)
 	if int_post_id == 0 {

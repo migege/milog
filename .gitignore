@@ -1,4 +1,4 @@
-build/*.tar.gz
+build/*
 conf/db.conf
 conf/cache.conf
 milog

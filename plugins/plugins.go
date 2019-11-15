@@ -22,10 +22,19 @@ func init() {
 	LoadPlugins(plugindir)
 }
 
+func getPython() string {
+	return beego.AppConfig.String("python")
+}
+
 func RunModule(module, hook string, v interface{}) error {
-	cmd := exec.Command("python", "-c", fmt.Sprintf("from %s import %s; %s('%s')", module, hook, hook, v))
+	py := getPython()
+	if py == "" {
+		return errors.New("Python is missing")
+	}
+	cmd := exec.Command(py, "-c", fmt.Sprintf("from %s import %s; %s('%s')", module, hook, hook, v))
 	out, err := cmd.Output()
 	if err != nil {
+		log.Printf("cmd run error: %s", cmd.String())
 		return err
 	}
 
@@ -37,6 +46,10 @@ func RunModule(module, hook string, v interface{}) error {
 }
 
 func LoadPlugins(plugindir string) error {
+	py := getPython()
+	if py == "" {
+		return errors.New("Python is missing")
+	}
 	return filepath.Walk(plugindir, func(path string, info os.FileInfo, _ error) error {
 		if info.IsDir() {
 			return nil
@@ -49,7 +62,8 @@ func LoadPlugins(plugindir string) error {
 
 		module := strings.Split(info.Name(), ".")[0]
 
-		cmd := exec.Command("python", "-c", fmt.Sprintf("from %s import register; register()", module))
+		cmd := exec.Command(py, "-c", fmt.Sprintf("from %s import register; register()", module))
+		log.Printf("cmd: %s", cmd.String())
 		paths := strings.Split(os.Getenv("PYTHONPATH"), ":")
 		paths = append(paths, plugindir)
 		os.Setenv("PYTHONPATH", strings.Join(paths, ":"))

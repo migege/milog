@@ -27,6 +27,11 @@ ENV HTTPS_PORT=
 ENV NO_PROXY=
 
 FROM alpine:3.21.0 as prod
+ENV TZ Asia/Shanghai
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.cloud.tencent.com/g' /etc/apk/repositories \
+  && apk add ca-certificates \
+  && apk add tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/localtime \
+  && rm -rf /var/cache/apk/*
 WORKDIR /app
 COPY --from=builder /go/home/aib/projects/github.com/migege/milog/milog .
 COPY --from=builder /go/home/aib/projects/github.com/migege/milog/static ./static
